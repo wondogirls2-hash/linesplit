@@ -1,4 +1,3 @@
-import Script from "next/script";
 import { SITE_NAME } from "@/lib/site";
 
 export type FaqItem = {
@@ -11,7 +10,13 @@ type FaqSectionProps = {
   heading?: string;
 };
 
-/** Visible FAQ + JSON-LD FAQPage schema (matches on-page Q&A text) */
+/**
+ * Visible FAQ + FAQPage JSON-LD in the initial HTML.
+ *
+ * Use a native <script type="application/ld+json"> (Next.js recommendation).
+ * next/script is for executable JS and defaults to afterInteractive, which
+ * keeps JSON-LD out of view-source / Rich Results Test crawls.
+ */
 export function FaqSection({
   items,
   heading = "Frequently asked questions",
@@ -31,11 +36,12 @@ export function FaqSection({
 
   return (
     <section aria-labelledby="faq-heading" className="space-y-5">
-      <Script
+      <script
         id={`${SITE_NAME.toLowerCase()}-faq-jsonld`}
         type="application/ld+json"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <h2
         id="faq-heading"
