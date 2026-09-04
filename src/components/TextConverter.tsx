@@ -126,9 +126,10 @@ export function TextConverter() {
       />
 
       <div className="glass-panel overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-2">
+        {/* Input | Result — equal-height columns; options live inside Result */}
+        <div className="grid grid-cols-1 items-stretch lg:grid-cols-2">
           {/* Input */}
-          <div className="flex min-h-[280px] flex-col border-b border-border/50 lg:min-h-[440px] lg:border-b-0 lg:border-r">
+          <div className="flex h-auto min-h-0 flex-col border-b border-border/50 lg:border-b-0 lg:border-r">
             <div className="flex items-center justify-between px-5 py-3">
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Input
@@ -142,21 +143,14 @@ export function TextConverter() {
               onChange={(e) => setSource(e.target.value)}
               placeholder="Paste your paragraph here..."
               spellCheck
-              className="min-h-[240px] flex-1 px-5 pb-5 pt-1 lg:min-h-[380px]"
+              className="min-h-[220px] flex-1 px-5 pb-5 pt-1 lg:min-h-[320px]"
               aria-label="Paragraph input"
             />
           </div>
 
-          {/* Options + Convert (no ad before Convert) */}
-          <div className="flex flex-col border-b border-border/50 lg:border-b-0">
-            <div className="flex items-center justify-between gap-2 px-4 py-2.5 sm:px-5">
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                Options
-              </h2>
-              <FloatingCopyButton text={result} />
-            </div>
-
-            <p className="mx-4 mt-1 rounded-xl bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+          {/* Result: options → Convert → Result header+Copy → result text */}
+          <div className="flex h-auto min-h-0 flex-col">
+            <p className="mx-4 mt-3 rounded-xl bg-primary/5 px-3 py-2 text-xs text-muted-foreground sm:mx-5">
               Auto-split may not be perfect —{" "}
               <button
                 type="button"
@@ -170,7 +164,7 @@ export function TextConverter() {
 
             <OptionsPanel options={options} onChange={handleOptionsChange} />
 
-            <div className="flex flex-wrap items-center gap-2 border-t border-border/50 bg-muted/20 px-4 py-3 sm:px-5">
+            <div className="flex flex-wrap items-center gap-2 border-b border-border/50 bg-muted/20 px-4 py-3 sm:px-5">
               <Button type="button" onClick={handleConvert}>
                 Convert
               </Button>
@@ -188,40 +182,41 @@ export function TextConverter() {
                 </span>
               )}
             </div>
+
+            <div className="flex items-center justify-between gap-2 px-4 py-2.5 sm:px-5">
+              <div className="flex min-w-0 items-baseline gap-2">
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  Result
+                </h2>
+                <span className="text-xs text-muted-foreground/80">
+                  · {sentenceCount} line{sentenceCount === 1 ? "" : "s"}
+                </span>
+              </div>
+              <FloatingCopyButton text={result} />
+            </div>
+
+            <Textarea
+              ref={resultTextareaRef}
+              value={result}
+              onChange={(e) => {
+                setResult(e.target.value);
+                setResultDirty(true);
+              }}
+              placeholder="Converted lines appear here…"
+              spellCheck
+              className={`min-h-[180px] w-full flex-1 px-5 pb-4 pt-1 transition-shadow lg:min-h-[200px] ${
+                resultFocused
+                  ? "bg-primary/[0.03] ring-2 ring-inset ring-primary/40"
+                  : ""
+              }`}
+              aria-label="Editable conversion result"
+            />
           </div>
         </div>
 
-        {/* Result below Convert — then ad */}
-        <div className="border-t border-border/50">
-          <div className="flex items-center justify-between px-5 py-3">
-            <div className="flex items-center gap-2">
-              <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                Result
-              </h2>
-              <span className="text-xs text-muted-foreground/80">
-                {sentenceCount} line{sentenceCount === 1 ? "" : "s"}
-              </span>
-            </div>
-          </div>
-          <Textarea
-            ref={resultTextareaRef}
-            value={result}
-            onChange={(e) => {
-              setResult(e.target.value);
-              setResultDirty(true);
-            }}
-            placeholder="Converted lines appear here…"
-            spellCheck
-            className={`min-h-[200px] w-full px-5 pb-4 pt-1 transition-shadow lg:min-h-[260px] ${
-              resultFocused
-                ? "bg-primary/[0.03] ring-2 ring-inset ring-primary/40"
-                : ""
-            }`}
-            aria-label="Editable conversion result"
-          />
-          <div className="border-t border-border/50 p-3">
-            <AdSlot position="after-result" slotId="paragraphsplitter-after-result" />
-          </div>
+        {/* Ad stays outside the 2-column workspace, below both panels */}
+        <div className="border-t border-border/50 p-3">
+          <AdSlot position="after-result" slotId="paragraphsplitter-after-result" />
         </div>
       </div>
 
