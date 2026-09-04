@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { AdConsentProvider } from "@/components/AdConsentProvider";
 import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
-import { OG_IMAGE_PATH, SITE_NAME, SITE_URL } from "@/lib/site";
+import {
+  ADSENSE_CLIENT_ID,
+  OG_IMAGE_PATH,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -40,6 +46,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* AdSense site verification / ads loader — required in <head> on every page */}
+        <Script
+          id="adsense-loader"
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+          crossOrigin="anonymous"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body className="min-h-screen font-sans">
         <ThemeProvider
           attribute="class"

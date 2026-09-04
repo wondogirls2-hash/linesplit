@@ -29,7 +29,13 @@ const AdConsentContext = createContext<AdConsentContextValue | null>(null);
 function loadAdSenseScript() {
   if (!ADSENSE_CLIENT_ID) return;
   if (typeof document === "undefined") return;
-  if (document.querySelector(`script[data-ad-client="${ADSENSE_CLIENT_ID}"]`)) {
+  // Head snippet (site verification) may already be present
+  if (
+    document.querySelector(`script[data-ad-client="${ADSENSE_CLIENT_ID}"]`) ||
+    document.querySelector(
+      `script[src*="adsbygoogle.js"][src*="${ADSENSE_CLIENT_ID}"]`
+    )
+  ) {
     return;
   }
   const script = document.createElement("script");

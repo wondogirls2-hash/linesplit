@@ -1,10 +1,3 @@
 # ads.txt for paragraphsplitter.com
-# ============================================================
-# Paste the exact line(s) from Google AdSense → Sites → ads.txt
-# Example format (replace with YOUR publisher ID):
-#
-# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
-#
-# Until you add a real line, crawlers will see only comments.
-# Keep this file at https://paragraphsplitter.com/ads.txt
-# ============================================================
+# From Google AdSense → Sites → ads.txt
+google.com, pub-1340602350988403, DIRECT, f08c47fec0942fa0
