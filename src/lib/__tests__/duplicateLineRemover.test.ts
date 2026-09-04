@@ -11,9 +11,15 @@ describe("removeDuplicateLines", () => {
     expect(removed).toBe(1);
   });
 
-  it("respects case-insensitive mode", () => {
-    const { result, removed } = removeDuplicateLines("Apple\napple\nPear", false);
-    expect(result).toBe("Apple\nPear");
-    expect(removed).toBe(1);
+  it("reports per-line duplicate stats", () => {
+    const { duplicates, removed } = removeDuplicateLines(
+      "apple\napple\napple\nbanana\nbanana",
+      true
+    );
+    expect(removed).toBe(3);
+    expect(duplicates).toEqual([
+      { line: "apple", occurrences: 3, removed: 2 },
+      { line: "banana", occurrences: 2, removed: 1 },
+    ]);
   });
 });

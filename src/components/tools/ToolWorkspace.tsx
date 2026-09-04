@@ -16,6 +16,8 @@ type ToolWorkspaceProps = {
   transform: (source: string) => string;
   resultHint?: string;
   resultMeta?: (source: string, result: string) => string;
+  /** Optional summary panel between options and result textarea */
+  resultSummary?: (source: string, result: string) => ReactNode;
   adSlotId?: string;
   convertLabel?: string;
   /** Isolates Recent history per sister tool in localStorage */
@@ -28,6 +30,7 @@ export function ToolWorkspace({
   transform,
   resultHint = "Edit the result freely before copying.",
   resultMeta,
+  resultSummary,
   adSlotId = "tool-between",
   convertLabel = "Convert",
   historyKey = "tool",
@@ -168,6 +171,8 @@ export function ToolWorkspace({
             <div className="border-b border-border/50 bg-muted/30 px-4 py-3">
               {options}
             </div>
+
+            {resultSummary?.(source, result)}
 
             <Textarea
               value={result}
