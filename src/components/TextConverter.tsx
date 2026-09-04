@@ -26,8 +26,10 @@ export function TextConverter() {
   const optionsRef = useRef(options);
   const resultDirtyRef = useRef(resultDirty);
   const sourceRef = useRef(source);
+  const resultTextareaRef = useRef<HTMLTextAreaElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const historyDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [resultFocused, setResultFocused] = useState(false);
 
   optionsRef.current = options;
   resultDirtyRef.current = resultDirty;
@@ -78,6 +80,18 @@ export function TextConverter() {
     setSource("");
     setResult("");
     setResultDirty(false);
+  }, []);
+
+  const focusResultEditor = useCallback(() => {
+    const el = resultTextareaRef.current;
+    if (!el) return;
+    el.focus();
+    // Place cursor at end so Enter/Backspace editing feels ready
+    const len = el.value.length;
+    el.setSelectionRange(len, len);
+    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    setResultFocused(true);
+    window.setTimeout(() => setResultFocused(false), 1200);
   }, []);
 
   useEffect(() => {
@@ -156,14 +170,20 @@ export function TextConverter() {
 
             <p className="mx-4 mt-2 rounded-xl bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
               Auto-split may not be perfect —{" "}
-              <span className="font-medium text-foreground">
-                click here to fine-tune manually.
-              </span>
+              <button
+                type="button"
+                onClick={focusResultEditor}
+                className="font-semibold text-primary underline-offset-2 transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+              >
+                click here to fine-tune manually
+              </button>
+              .
             </p>
 
             <OptionsPanel options={options} onChange={handleOptionsChange} />
 
             <Textarea
+              ref={resultTextareaRef}
               value={result}
               onChange={(e) => {
                 setResult(e.target.value);
@@ -171,7 +191,11 @@ export function TextConverter() {
               }}
               placeholder="Converted lines appear here…"
               spellCheck
-              className="min-h-[200px] flex-1 px-5 pb-5 pt-3 lg:min-h-[240px]"
+              className={`min-h-[200px] flex-1 px-5 pb-5 pt-3 transition-shadow lg:min-h-[240px] ${
+                resultFocused
+                  ? "ring-2 ring-primary/40 ring-inset bg-primary/[0.03]"
+                  : ""
+              }`}
               aria-label="Editable conversion result"
             />
           </div>
