@@ -129,6 +129,7 @@ export function FindAndReplaceTool() {
       transform={transform}
       convertLabel="Replace all"
       adSlotId="replace-between"
+      historyKey="find-and-replace"
       resultHint="Rules run top to bottom. Regex is off by default for safer edits."
     />
   );

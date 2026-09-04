@@ -1,12 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { AdSlot } from "@/components/AdSlot";
 import { FloatingCopyButton } from "@/components/FloatingCopyButton";
+import { HistoryPanel } from "@/components/HistoryPanel";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useHistory } from "@/lib/useHistory";
 
 const DEBOUNCE_MS = 250;
+const HISTORY_DEBOUNCE_MS = 1200;
 
 type ToolWorkspaceProps = {
   options: ReactNode;
@@ -15,6 +18,8 @@ type ToolWorkspaceProps = {
   resultMeta?: (source: string, result: string) => string;
   adSlotId?: string;
   convertLabel?: string;
+  /** Isolates Recent history per sister tool in localStorage */
+  historyKey?: string;
 };
 
 /** Shared two-panel workspace (design system from remove-duplicate-lines). */
@@ -25,11 +30,16 @@ export function ToolWorkspace({
   resultMeta,
   adSlotId = "tool-between",
   convertLabel = "Convert",
+  historyKey = "tool",
 }: ToolWorkspaceProps) {
   const [source, setSource] = useState("");
   const [result, setResult] = useState("");
   const [resultDirty, setResultDirty] = useState(false);
   const [modKey, setModKey] = useState("Ctrl");
+  const { items: history, push: pushHistory, clear: clearHistoryItems } =
+    useHistory(historyKey);
+
+  const historyDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (/Mac|iPhone|iPad/.test(navigator.platform)) setModKey("⌘");
@@ -57,10 +67,21 @@ export function ToolWorkspace({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only when transform changes
   }, [transform]);
 
-  const handleConvert = useCallback(
-    () => regenerate(source),
-    [regenerate, source]
-  );
+  useEffect(() => {
+    if (!source.trim()) return;
+    if (historyDebounceRef.current) clearTimeout(historyDebounceRef.current);
+    historyDebounceRef.current = setTimeout(() => {
+      pushHistory(source);
+    }, HISTORY_DEBOUNCE_MS);
+    return () => {
+      if (historyDebounceRef.current) clearTimeout(historyDebounceRef.current);
+    };
+  }, [source, pushHistory]);
+
+  const handleConvert = useCallback(() => {
+    regenerate(source);
+    if (source.trim()) pushHistory(source);
+  }, [regenerate, source, pushHistory]);
 
   const handleClear = useCallback(() => {
     setSource("");
@@ -88,6 +109,16 @@ export function ToolWorkspace({
 
   return (
     <div className="space-y-4">
+      <HistoryPanel
+        items={history}
+        onSelect={(text) => {
+          setSource(text);
+          setResultDirty(false);
+          regenerate(text);
+        }}
+        onClear={clearHistoryItems}
+      />
+
       <div className="glass-panel overflow-hidden">
         <div className="flex flex-col lg:flex-row">
           <div className="flex min-h-[300px] flex-1 flex-col border-b border-border/50 lg:min-h-[420px] lg:border-b-0 lg:border-r">

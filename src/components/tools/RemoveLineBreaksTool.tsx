@@ -72,6 +72,7 @@ export function RemoveLineBreaksTool() {
       transform={transform}
       convertLabel="Join lines"
       adSlotId="join-between"
+      historyKey="remove-line-breaks"
       resultHint="Great for Excel cells, email signatures, and PDF copy-paste."
       resultMeta={(_, result) =>
         `${result.length.toLocaleString()} chars`

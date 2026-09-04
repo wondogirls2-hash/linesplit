@@ -63,6 +63,7 @@ export function CaseConverterTool() {
       transform={transform}
       convertLabel="Convert case"
       adSlotId="case-between"
+      historyKey="case-converter"
       resultHint="Only casing changes — spelling and punctuation stay intact."
     />
   );

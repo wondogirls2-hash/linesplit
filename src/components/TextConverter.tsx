@@ -21,7 +21,7 @@ export function TextConverter() {
   const [options, setOptions] = useState<ConvertOptions>(DEFAULT_OPTIONS);
   const [modKey, setModKey] = useState("Ctrl");
   const { items: history, push: pushHistory, clear: clearHistoryItems } =
-    useHistory();
+    useHistory("paragraph-splitter");
 
   const optionsRef = useRef(options);
   const resultDirtyRef = useRef(resultDirty);

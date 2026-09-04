@@ -41,6 +41,7 @@ export function RemoveDuplicateLinesTool() {
       transform={transform}
       convertLabel="Remove duplicates"
       adSlotId="dedupe-between"
+      historyKey="remove-duplicate-lines"
       resultHint="Duplicates are removed from top to bottom — first occurrence is kept."
       resultMeta={(source) => {
         const { removed } = removeDuplicateLines(source, caseSensitive);
