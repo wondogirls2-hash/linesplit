@@ -1,18 +1,19 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
+import { TOOL_NAV_ORDER, TOOLS } from "@/lib/toolsCatalog";
 
+/**
+ * App Router sitemap — tool routes are derived from TOOLS so new tools
+ * appear automatically when added to toolsCatalog.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = [
-    "",
-    "/tools/remove-line-breaks",
-    "/tools/remove-duplicate-lines",
-    "/tools/case-converter",
-    "/tools/find-and-replace",
-    "/privacy-policy",
-    "/about",
-    "/contact",
-  ];
+  const toolPaths = TOOL_NAV_ORDER.map((id) => TOOLS[id].href).filter(
+    (href) => href !== "/"
+  );
 
+  const staticPaths = ["/privacy-policy", "/about", "/contact"];
+
+  const routes = ["", ...toolPaths, ...staticPaths];
   const lastModified = new Date();
 
   return routes.map((path) => ({

@@ -1,8 +1,12 @@
+import type { ReactNode } from "react";
 import { SITE_NAME } from "@/lib/site";
 
 export type FaqItem = {
   question: string;
+  /** Plain-text answer for FAQPage JSON-LD (must match visible meaning) */
   answer: string;
+  /** Optional rich answer with links; falls back to plain `answer` */
+  answerContent?: ReactNode;
 };
 
 type FaqSectionProps = {
@@ -11,11 +15,7 @@ type FaqSectionProps = {
 };
 
 /**
- * Visible FAQ + FAQPage JSON-LD in the initial HTML.
- *
- * Use a native <script type="application/ld+json"> (Next.js recommendation).
- * next/script is for executable JS and defaults to afterInteractive, which
- * keeps JSON-LD out of view-source / Rich Results Test crawls.
+ * Visible FAQ + FAQPage JSON-LD in the initial HTML (Server Component).
  */
 export function FaqSection({
   items,
@@ -55,11 +55,13 @@ export function FaqSection({
             key={item.question}
             className="rounded-2xl border border-border/50 bg-card/40 px-5 py-4"
           >
-            <dt className="text-sm font-semibold text-foreground">
-              {item.question}
+            <dt>
+              <h3 className="text-sm font-semibold text-foreground">
+                {item.question}
+              </h3>
             </dt>
             <dd className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-              {item.answer}
+              {item.answerContent ?? item.answer}
             </dd>
           </div>
         ))}
