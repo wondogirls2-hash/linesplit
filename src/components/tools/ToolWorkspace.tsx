@@ -1,0 +1,195 @@
+"use client";
+
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { AdSlot } from "@/components/AdSlot";
+import { FloatingCopyButton } from "@/components/FloatingCopyButton";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+
+const DEBOUNCE_MS = 250;
+
+type ToolWorkspaceProps = {
+  options: ReactNode;
+  transform: (source: string) => string;
+  resultHint?: string;
+  resultMeta?: (source: string, result: string) => string;
+  adSlotId?: string;
+  convertLabel?: string;
+};
+
+/** Shared two-panel workspace (design system from remove-duplicate-lines). */
+export function ToolWorkspace({
+  options,
+  transform,
+  resultHint = "Edit the result freely before copying.",
+  resultMeta,
+  adSlotId = "tool-between",
+  convertLabel = "Convert",
+}: ToolWorkspaceProps) {
+  const [source, setSource] = useState("");
+  const [result, setResult] = useState("");
+  const [resultDirty, setResultDirty] = useState(false);
+  const [modKey, setModKey] = useState("Ctrl");
+
+  useEffect(() => {
+    if (/Mac|iPhone|iPad/.test(navigator.platform)) setModKey("⌘");
+  }, []);
+
+  const regenerate = useCallback(
+    (text: string) => {
+      setResult(transform(text));
+      setResultDirty(false);
+    },
+    [transform]
+  );
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (resultDirty) return;
+      regenerate(source);
+    }, DEBOUNCE_MS);
+    return () => clearTimeout(t);
+  }, [source, resultDirty, regenerate]);
+
+  useEffect(() => {
+    if (resultDirty) return;
+    regenerate(source);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only when transform changes
+  }, [transform]);
+
+  const handleConvert = useCallback(
+    () => regenerate(source),
+    [regenerate, source]
+  );
+
+  const handleClear = useCallback(() => {
+    setSource("");
+    setResult("");
+    setResultDirty(false);
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        handleConvert();
+      }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        handleClear();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [handleClear, handleConvert]);
+
+  const meta = resultMeta?.(source, result);
+  const lineCount = result ? result.split(/\n/).length : 0;
+
+  return (
+    <div className="space-y-4">
+      <div className="glass-panel overflow-hidden">
+        <div className="flex flex-col lg:flex-row">
+          <div className="flex min-h-[300px] flex-1 flex-col border-b border-border/50 lg:min-h-[420px] lg:border-b-0 lg:border-r">
+            <div className="flex items-center justify-between px-5 py-3">
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Input
+              </h2>
+              <span className="text-xs text-muted-foreground/80">
+                {source.length.toLocaleString()} chars
+              </span>
+            </div>
+            <Textarea
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+              placeholder="Paste your text here..."
+              spellCheck
+              className="min-h-[240px] flex-1 px-5 pb-5 pt-1 lg:min-h-[360px]"
+              aria-label="Input text"
+            />
+          </div>
+
+          <div className="hidden border-border/50 p-3 lg:flex lg:items-stretch lg:border-r">
+            <AdSlot
+              position="between-panels"
+              slotId={adSlotId}
+              className="h-full"
+            />
+          </div>
+
+          <div className="relative flex min-h-[300px] flex-1 flex-col border-b border-border/50 lg:min-h-[420px] lg:border-b-0">
+            <div className="sticky top-0 z-10 flex items-center justify-between gap-2 border-b border-border/40 bg-card/90 px-4 py-2.5 backdrop-blur-md sm:px-5">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  Result
+                </h2>
+                <span className="text-xs text-muted-foreground/80">
+                  {meta ?? `${lineCount} line${lineCount === 1 ? "" : "s"}`}
+                </span>
+              </div>
+              <FloatingCopyButton text={result} />
+            </div>
+
+            <p className="mx-4 mt-2 rounded-xl bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+              {resultHint}
+            </p>
+
+            <div className="border-b border-border/50 bg-muted/30 px-4 py-3">
+              {options}
+            </div>
+
+            <Textarea
+              value={result}
+              onChange={(e) => {
+                setResult(e.target.value);
+                setResultDirty(true);
+              }}
+              placeholder="Converted text appears here…"
+              spellCheck
+              className="min-h-[180px] flex-1 px-5 pb-5 pt-3 lg:min-h-[220px]"
+              aria-label="Result text"
+            />
+          </div>
+        </div>
+
+        <div className="border-t border-border/50 p-3 lg:hidden">
+          <AdSlot position="between-panels" slotId={adSlotId} />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 border-t border-border/50 bg-muted/20 px-4 py-3.5 sm:px-5">
+          <Button type="button" variant="secondary" onClick={handleConvert}>
+            {convertLabel}
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={handleClear}
+            disabled={!source && !result}
+          >
+            Clear
+          </Button>
+          {resultDirty && (
+            <span className="text-xs text-muted-foreground sm:ml-auto">
+              Manual edits active — {convertLabel} or {modKey}+Enter to re-run
+            </span>
+          )}
+        </div>
+      </div>
+
+      <p className="text-center text-[11px] text-muted-foreground/80">
+        <kbd className="rounded border border-border/70 bg-muted/50 px-1.5 py-0.5 font-sans text-[10px]">
+          {modKey}
+        </kbd>
+        {" + "}
+        <kbd className="rounded border border-border/70 bg-muted/50 px-1.5 py-0.5 font-sans text-[10px]">
+          Enter
+        </kbd>
+        {" re-run · "}
+        <kbd className="rounded border border-border/70 bg-muted/50 px-1.5 py-0.5 font-sans text-[10px]">
+          Esc
+        </kbd>
+        {" clear all"}
+      </p>
+    </div>
+  );
+}
