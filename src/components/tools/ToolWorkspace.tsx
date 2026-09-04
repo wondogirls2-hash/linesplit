@@ -16,22 +16,20 @@ type ToolWorkspaceProps = {
   transform: (source: string) => string;
   resultHint?: string;
   resultMeta?: (source: string, result: string) => string;
-  /** Optional summary panel between options and result textarea */
   resultSummary?: (source: string, result: string) => ReactNode;
   adSlotId?: string;
   convertLabel?: string;
-  /** Isolates Recent history per sister tool in localStorage */
   historyKey?: string;
 };
 
-/** Shared two-panel workspace (design system from remove-duplicate-lines). */
+/** Shared workspace: Input | Options+Convert → Result → Ad */
 export function ToolWorkspace({
   options,
   transform,
   resultHint = "Edit the result freely before copying.",
   resultMeta,
   resultSummary,
-  adSlotId = "tool-between",
+  adSlotId = "tool-after-result",
   convertLabel = "Convert",
   historyKey = "tool",
 }: ToolWorkspaceProps) {
@@ -123,8 +121,8 @@ export function ToolWorkspace({
       />
 
       <div className="glass-panel overflow-hidden">
-        <div className="flex flex-col lg:flex-row">
-          <div className="flex min-h-[300px] flex-1 flex-col border-b border-border/50 lg:min-h-[420px] lg:border-b-0 lg:border-r">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          <div className="flex min-h-[260px] flex-col border-b border-border/50 lg:min-h-[400px] lg:border-b-0 lg:border-r">
             <div className="flex items-center justify-between px-5 py-3">
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Input
@@ -138,33 +136,20 @@ export function ToolWorkspace({
               onChange={(e) => setSource(e.target.value)}
               placeholder="Paste your text here..."
               spellCheck
-              className="min-h-[240px] flex-1 px-5 pb-5 pt-1 lg:min-h-[360px]"
+              className="min-h-[220px] flex-1 px-5 pb-5 pt-1 lg:min-h-[340px]"
               aria-label="Input text"
             />
           </div>
 
-          <div className="hidden border-border/50 p-3 lg:flex lg:items-stretch lg:border-r">
-            <AdSlot
-              position="between-panels"
-              slotId={adSlotId}
-              className="h-full"
-            />
-          </div>
-
-          <div className="relative flex min-h-[300px] flex-1 flex-col border-b border-border/50 lg:min-h-[420px] lg:border-b-0">
-            <div className="sticky top-0 z-10 flex items-center justify-between gap-2 border-b border-border/40 bg-card/90 px-4 py-2.5 backdrop-blur-md sm:px-5">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  Result
-                </h2>
-                <span className="text-xs text-muted-foreground/80">
-                  {meta ?? `${lineCount} line${lineCount === 1 ? "" : "s"}`}
-                </span>
-              </div>
+          <div className="flex flex-col border-b border-border/50 lg:border-b-0">
+            <div className="flex items-center justify-between gap-2 px-4 py-2.5 sm:px-5">
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Options
+              </h2>
               <FloatingCopyButton text={result} />
             </div>
 
-            <p className="mx-4 mt-2 rounded-xl bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+            <p className="mx-4 mt-1 rounded-xl bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
               {resultHint}
             </p>
 
@@ -172,43 +157,56 @@ export function ToolWorkspace({
               {options}
             </div>
 
-            {resultSummary?.(source, result)}
-
-            <Textarea
-              value={result}
-              onChange={(e) => {
-                setResult(e.target.value);
-                setResultDirty(true);
-              }}
-              placeholder="Converted text appears here…"
-              spellCheck
-              className="min-h-[180px] flex-1 px-5 pb-5 pt-3 lg:min-h-[220px]"
-              aria-label="Result text"
-            />
+            <div className="flex flex-wrap items-center gap-2 bg-muted/20 px-4 py-3 sm:px-5">
+              <Button type="button" onClick={handleConvert}>
+                {convertLabel}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleClear}
+                disabled={!source && !result}
+              >
+                Clear
+              </Button>
+              {resultDirty && (
+                <span className="text-xs text-muted-foreground sm:ml-auto">
+                  Manual edits — {convertLabel} or {modKey}+Enter
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-border/50 p-3 lg:hidden">
-          <AdSlot position="between-panels" slotId={adSlotId} />
-        </div>
+        <div className="border-t border-border/50">
+          <div className="flex items-center justify-between px-5 py-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Result
+              </h2>
+              <span className="text-xs text-muted-foreground/80">
+                {meta ?? `${lineCount} line${lineCount === 1 ? "" : "s"}`}
+              </span>
+            </div>
+          </div>
 
-        <div className="flex flex-wrap items-center gap-2 border-t border-border/50 bg-muted/20 px-4 py-3.5 sm:px-5">
-          <Button type="button" variant="secondary" onClick={handleConvert}>
-            {convertLabel}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={handleClear}
-            disabled={!source && !result}
-          >
-            Clear
-          </Button>
-          {resultDirty && (
-            <span className="text-xs text-muted-foreground sm:ml-auto">
-              Manual edits active — {convertLabel} or {modKey}+Enter to re-run
-            </span>
-          )}
+          {resultSummary?.(source, result)}
+
+          <Textarea
+            value={result}
+            onChange={(e) => {
+              setResult(e.target.value);
+              setResultDirty(true);
+            }}
+            placeholder="Converted text appears here…"
+            spellCheck
+            className="min-h-[180px] w-full px-5 pb-4 pt-1 lg:min-h-[240px]"
+            aria-label="Result text"
+          />
+
+          <div className="border-t border-border/50 p-3">
+            <AdSlot position="after-result" slotId={adSlotId} />
+          </div>
         </div>
       </div>
 

@@ -15,7 +15,7 @@ export function SiteHeader({ title, description, eyebrow }: SiteHeaderProps) {
       <div className="flex w-full flex-wrap items-center justify-between gap-3">
         <Link href="/" className="flex items-baseline gap-2">
           <span className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-            LineSplit
+            ParagraphSplitter
           </span>
           <span className="hidden text-sm font-medium text-muted-foreground sm:inline">
             free · offline-capable

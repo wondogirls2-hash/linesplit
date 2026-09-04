@@ -4,7 +4,7 @@ import { wrapByLength } from "../charLimitSplitter";
 describe("wrapByLength", () => {
   it("wraps near the SEO meta limit of 160", () => {
     const text =
-      "LineSplit helps writers turn a long paragraph into clean lines for docs, slides, and social captions without changing a single word.";
+      "ParagraphSplitter helps writers turn a long paragraph into clean lines for docs, slides, and social captions without changing a single word.";
     const lines = wrapByLength(text, 160);
     expect(lines.length).toBeGreaterThanOrEqual(1);
     for (const line of lines) {

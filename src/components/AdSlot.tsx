@@ -1,6 +1,10 @@
 import { cn } from "@/lib/utils";
 
-export type AdPosition = "top-banner" | "between-panels" | "footer";
+export type AdPosition =
+  | "top-banner"
+  | "between-panels"
+  | "after-result"
+  | "footer";
 
 type AdSlotProps = {
   position: AdPosition;
@@ -23,6 +27,11 @@ const SIZE_BY_POSITION: Record<
     height: "min-h-[100px] lg:min-h-[280px]",
     maxWidth: "w-full",
   },
+  "after-result": {
+    label: "After Result",
+    height: "min-h-[90px]",
+    maxWidth: "w-full",
+  },
   footer: {
     label: "Footer Banner",
     height: "min-h-[90px]",
@@ -33,9 +42,6 @@ const SIZE_BY_POSITION: Record<
 /**
  * AdSense-ready placeholder. Replace the inner placeholder with
  * the real ad unit when you have publisher credentials.
- *
- * Example later:
- *   <ins className="adsbygoogle" data-ad-slot={slotId} ... />
  */
 export function AdSlot({
   position,

@@ -86,7 +86,6 @@ export function TextConverter() {
     const el = resultTextareaRef.current;
     if (!el) return;
     el.focus();
-    // Place cursor at end so Enter/Backspace editing feels ready
     const len = el.value.length;
     el.setSelectionRange(len, len);
     el.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -127,8 +126,9 @@ export function TextConverter() {
       />
 
       <div className="glass-panel overflow-hidden">
-        <div className="flex flex-col lg:flex-row">
-          <div className="flex min-h-[320px] flex-1 flex-col border-b border-border/50 lg:min-h-[440px] lg:border-b-0 lg:border-r">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {/* Input */}
+          <div className="flex min-h-[280px] flex-col border-b border-border/50 lg:min-h-[440px] lg:border-b-0 lg:border-r">
             <div className="flex items-center justify-between px-5 py-3">
               <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Input
@@ -142,38 +142,26 @@ export function TextConverter() {
               onChange={(e) => setSource(e.target.value)}
               placeholder="Paste your paragraph here..."
               spellCheck
-              className="min-h-[260px] flex-1 px-5 pb-5 pt-1 lg:min-h-[380px]"
+              className="min-h-[240px] flex-1 px-5 pb-5 pt-1 lg:min-h-[380px]"
               aria-label="Paragraph input"
             />
           </div>
 
-          <div className="hidden border-border/50 p-3 lg:flex lg:w-auto lg:items-stretch lg:border-r">
-            <AdSlot
-              position="between-panels"
-              slotId="linesplit-between"
-              className="h-full"
-            />
-          </div>
-
-          <div className="relative flex min-h-[320px] flex-1 flex-col border-b border-border/50 lg:min-h-[440px] lg:border-b-0">
-            <div className="sticky top-0 z-10 flex items-center justify-between gap-2 border-b border-border/40 bg-card/90 px-4 py-2.5 backdrop-blur-md sm:px-5">
-              <div className="flex items-center gap-2">
-                <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  Result
-                </h2>
-                <span className="text-xs text-muted-foreground/80">
-                  {sentenceCount} line{sentenceCount === 1 ? "" : "s"}
-                </span>
-              </div>
+          {/* Options + Convert (no ad before Convert) */}
+          <div className="flex flex-col border-b border-border/50 lg:border-b-0">
+            <div className="flex items-center justify-between gap-2 px-4 py-2.5 sm:px-5">
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Options
+              </h2>
               <FloatingCopyButton text={result} />
             </div>
 
-            <p className="mx-4 mt-2 rounded-xl bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+            <p className="mx-4 mt-1 rounded-xl bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
               Auto-split may not be perfect —{" "}
               <button
                 type="button"
                 onClick={focusResultEditor}
-                className="font-semibold text-primary underline-offset-2 transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+                className="rounded-sm font-semibold text-primary underline-offset-2 transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 click here to fine-tune manually
               </button>
@@ -182,47 +170,58 @@ export function TextConverter() {
 
             <OptionsPanel options={options} onChange={handleOptionsChange} />
 
-            <Textarea
-              ref={resultTextareaRef}
-              value={result}
-              onChange={(e) => {
-                setResult(e.target.value);
-                setResultDirty(true);
-              }}
-              placeholder="Converted lines appear here…"
-              spellCheck
-              className={`min-h-[200px] flex-1 px-5 pb-5 pt-3 transition-shadow lg:min-h-[240px] ${
-                resultFocused
-                  ? "ring-2 ring-primary/40 ring-inset bg-primary/[0.03]"
-                  : ""
-              }`}
-              aria-label="Editable conversion result"
-            />
+            <div className="flex flex-wrap items-center gap-2 border-t border-border/50 bg-muted/20 px-4 py-3 sm:px-5">
+              <Button type="button" onClick={handleConvert}>
+                Convert
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleClear}
+                disabled={!source && !result}
+              >
+                Clear
+              </Button>
+              {resultDirty && (
+                <span className="text-xs text-muted-foreground sm:ml-auto">
+                  Manual edits active — Convert or {modKey}+Enter to re-split
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-border/50 p-3 lg:hidden">
-          <AdSlot position="between-panels" slotId="linesplit-between" />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 border-t border-border/50 bg-muted/20 px-4 py-3.5 sm:px-5">
-          <Button type="button" variant="secondary" onClick={handleConvert}>
-            Convert
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={handleClear}
-            disabled={!source && !result}
-          >
-            Clear
-          </Button>
-
-          {resultDirty && (
-            <span className="text-xs text-muted-foreground sm:ml-auto">
-              Manual edits active — Convert or {modKey}+Enter to re-split
-            </span>
-          )}
+        {/* Result below Convert — then ad */}
+        <div className="border-t border-border/50">
+          <div className="flex items-center justify-between px-5 py-3">
+            <div className="flex items-center gap-2">
+              <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Result
+              </h2>
+              <span className="text-xs text-muted-foreground/80">
+                {sentenceCount} line{sentenceCount === 1 ? "" : "s"}
+              </span>
+            </div>
+          </div>
+          <Textarea
+            ref={resultTextareaRef}
+            value={result}
+            onChange={(e) => {
+              setResult(e.target.value);
+              setResultDirty(true);
+            }}
+            placeholder="Converted lines appear here…"
+            spellCheck
+            className={`min-h-[200px] w-full px-5 pb-4 pt-1 transition-shadow lg:min-h-[260px] ${
+              resultFocused
+                ? "bg-primary/[0.03] ring-2 ring-inset ring-primary/40"
+                : ""
+            }`}
+            aria-label="Editable conversion result"
+          />
+          <div className="border-t border-border/50 p-3">
+            <AdSlot position="after-result" slotId="paragraphsplitter-after-result" />
+          </div>
         </div>
       </div>
 

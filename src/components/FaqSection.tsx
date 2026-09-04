@@ -1,4 +1,5 @@
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import Script from "next/script";
+import { SITE_NAME } from "@/lib/site";
 
 export type FaqItem = {
   question: string;
@@ -10,7 +11,7 @@ type FaqSectionProps = {
   heading?: string;
 };
 
-/** Visible FAQ + JSON-LD FAQPage schema for SEO */
+/** Visible FAQ + JSON-LD FAQPage schema (matches on-page Q&A text) */
 export function FaqSection({
   items,
   heading = "Frequently asked questions",
@@ -30,8 +31,10 @@ export function FaqSection({
 
   return (
     <section aria-labelledby="faq-heading" className="space-y-5">
-      <script
+      <Script
+        id={`${SITE_NAME.toLowerCase()}-faq-jsonld`}
         type="application/ld+json"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <h2
@@ -55,9 +58,6 @@ export function FaqSection({
           </div>
         ))}
       </dl>
-      <p className="sr-only">
-        {SITE_NAME} at {SITE_URL}
-      </p>
     </section>
   );
 }

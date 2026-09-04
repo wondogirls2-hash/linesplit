@@ -28,26 +28,29 @@ export function buildPageMetadata({
     keywords,
     alternates: { canonical: url },
     openGraph: {
-      title: fullTitle,
-      description,
-      url,
-      siteName: SITE_NAME,
-      type: "website",
-      // Placeholder until a real OG asset is designed
-      images: [
-        {
-          url: `${SITE_URL}${OG_IMAGE_PATH}`,
-          width: 1200,
-          height: 630,
-          alt: fullTitle,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: fullTitle,
-      description,
-      images: [`${SITE_URL}${OG_IMAGE_PATH}`],
-    },
-  };
+    title: fullTitle,
+    description,
+    url,
+    siteName: SITE_NAME,
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: `${SITE_URL}${OG_IMAGE_PATH}`,
+        width: 1200,
+        height: 630,
+        alt: fullTitle,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: fullTitle,
+    description,
+    images: [`${SITE_URL}${OG_IMAGE_PATH}`],
+  },
+  other: {
+    "og:site_name": SITE_NAME,
+  },
+};
 }

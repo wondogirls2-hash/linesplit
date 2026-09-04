@@ -23,14 +23,14 @@ export const metadata: Metadata = buildPageMetadata({
 
 const FAQ = [
   {
-    question: "Does LineSplit send my text to a server?",
+    question: "Does ParagraphSplitter send my text to a server?",
     answer:
       "No. All conversion runs in your browser. Your paragraph is never uploaded, stored on a server, or sent to an AI model.",
   },
   {
     question: "Will this rewrite or change my wording?",
     answer:
-      "No. LineSplit only inserts line breaks (and optional formatting like bullets). Your original words stay intact — no AI alterations.",
+      "No. ParagraphSplitter only inserts line breaks (and optional formatting like bullets). Your original words stay intact — no AI alterations.",
   },
   {
     question: "How do I split a paragraph into sentences?",
@@ -55,7 +55,7 @@ export default function HomePage() {
 
       <OppositeToolBanner target="remove-line-breaks" />
 
-      <AdSlot position="top-banner" slotId="linesplit-top" className="mb-6" />
+      <AdSlot position="top-banner" slotId="paragraphsplitter-top" className="mb-6" />
 
       <main className="flex-1 space-y-12">
         <TextConverter />
@@ -106,10 +106,10 @@ export default function HomePage() {
       </main>
 
       <footer className="mt-14 space-y-6 border-t border-border/60 pt-8">
-        <AdSlot position="footer" slotId="linesplit-footer" />
+        <AdSlot position="footer" slotId="paragraphsplitter-footer" />
         <p className="text-center text-xs text-muted-foreground">
-          LineSplit processes text entirely in your browser. No accounts. No
-          analytics on your content. No AI model in the loop.
+          ParagraphSplitter processes text entirely in your browser. No
+          accounts. No analytics on your content. No AI model in the loop.
         </p>
       </footer>
     </div>

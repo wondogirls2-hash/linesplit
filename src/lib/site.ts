@@ -1,7 +1,8 @@
-/** Canonical site URL for sitemap / OG */
+/** Canonical site URL for sitemap / OG / metadata */
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://linesplit.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://paragraphsplitter.com";
 
-export const SITE_NAME = "LineSplit";
+/** Display brand — matches production domain */
+export const SITE_NAME = "ParagraphSplitter";
 
 export const OG_IMAGE_PATH = "/og.png"; // placeholder until real asset is added
