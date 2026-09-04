@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { AdConsentProvider } from "@/components/AdConsentProvider";
+import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { OG_IMAGE_PATH, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -44,8 +47,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <Toaster position="bottom-center" richColors closeButton />
+          <AdConsentProvider>
+            {children}
+            <CookieConsentBanner />
+            <Toaster position="bottom-center" richColors closeButton />
+            <Analytics />
+          </AdConsentProvider>
         </ThemeProvider>
       </body>
     </html>

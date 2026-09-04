@@ -3,6 +3,7 @@ import { AdSlot } from "@/components/AdSlot";
 import { FaqSection } from "@/components/FaqSection";
 import { OppositeToolBanner } from "@/components/OppositeToolBanner";
 import { RelatedToolsCard } from "@/components/RelatedToolsCard";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TextConverter } from "@/components/TextConverter";
 import { WhyUseSection } from "@/components/WhyUseSection";
@@ -105,13 +106,7 @@ export default function HomePage() {
         <FaqSection items={FAQ} />
       </main>
 
-      <footer className="mt-14 space-y-6 border-t border-border/60 pt-8">
-        <AdSlot position="footer" slotId="paragraphsplitter-footer" />
-        <p className="text-center text-xs text-muted-foreground">
-          ParagraphSplitter processes text entirely in your browser. No
-          accounts. No analytics on your content. No AI model in the loop.
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

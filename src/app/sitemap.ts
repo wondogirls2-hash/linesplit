@@ -8,6 +8,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tools/remove-duplicate-lines",
     "/tools/case-converter",
     "/tools/find-and-replace",
+    "/privacy-policy",
+    "/about",
+    "/contact",
   ];
 
   const lastModified = new Date();
@@ -16,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${SITE_URL}${path}`,
     lastModified,
     changeFrequency: path === "" ? "weekly" : "monthly",
-    priority: path === "" ? 1 : 0.8,
+    priority:
+      path === "" ? 1 : path.startsWith("/tools") ? 0.8 : 0.5,
   }));
 }

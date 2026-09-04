@@ -1,5 +1,6 @@
 import { AdSlot } from "@/components/AdSlot";
 import { RelatedToolsCard } from "@/components/RelatedToolsCard";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import type { ToolId } from "@/lib/toolsCatalog";
 
@@ -44,13 +45,10 @@ export function ToolPageShell({
         <RelatedToolsCard current={toolId} />
       </div>
 
-      <footer className="mt-14 space-y-6 border-t border-border/60 pt-8">
-        <AdSlot position="footer" slotId={`${adSlotPrefix}-footer`} />
-        <p className="text-center text-xs text-muted-foreground">
-          Runs 100% in your browser. No accounts. No uploads. Your text never
-          leaves this device.
-        </p>
-      </footer>
+      <SiteFooter
+        adSlotId={`${adSlotPrefix}-footer`}
+        note="Runs 100% in your browser. No accounts. No uploads. Your text never leaves this device."
+      />
     </div>
   );
 }
