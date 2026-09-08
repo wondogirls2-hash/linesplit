@@ -57,4 +57,18 @@ describe("splitSentences", () => {
     expect(splitSentences("")).toEqual([]);
     expect(splitSentences("   ")).toEqual([]);
   });
+
+  it("splits Korean sentences without throwing", () => {
+    const result = splitSentences(
+      "안녕하세요. 오늘 날씨가 좋습니다! 잘 지내셨나요?"
+    );
+    expect(result.length).toBeGreaterThanOrEqual(2);
+    expect(result.join(" ")).toContain("안녕하세요");
+  });
+
+  it("never throws on messy input", () => {
+    expect(() =>
+      splitSentences("... !!! ??? Mr. Dr. $1.2.3 \n\n\n hello.")
+    ).not.toThrow();
+  });
 });

@@ -48,8 +48,13 @@ export function ToolWorkspace({
 
   const regenerate = useCallback(
     (text: string) => {
-      setResult(transform(text));
-      setResultDirty(false);
+      try {
+        setResult(transform(text));
+        setResultDirty(false);
+      } catch {
+        setResult(text);
+        setResultDirty(true);
+      }
     },
     [transform]
   );

@@ -40,8 +40,13 @@ export function TextConverter() {
   }, []);
 
   const regenerate = useCallback((text: string, opts: ConvertOptions) => {
-    setResult(convertText(text, opts));
-    setResultDirty(false);
+    try {
+      setResult(convertText(text, opts));
+      setResultDirty(false);
+    } catch {
+      setResult(text);
+      setResultDirty(true);
+    }
   }, []);
 
   useEffect(() => {
