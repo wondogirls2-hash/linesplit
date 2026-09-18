@@ -36,15 +36,6 @@ const nextConfig = {
           },
         ],
       },
-      {
-        source: "/",
-        headers: [
-          {
-            key: "Link",
-            value: '<https://paragraphsplitter.com/>; rel="canonical"',
-          },
-        ],
-      },
     ];
   },
 };
