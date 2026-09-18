@@ -23,10 +23,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entries.push({
       url: `${SITE_URL}${href}`,
       lastModified,
-      changeFrequency: "monthly",
-      priority: 0.8,
+      changeFrequency: "weekly",
+      priority: id === "case-converter" ? 0.9 : 0.8,
     });
   }
+
+  entries.push({
+    url: `${SITE_URL}/tools`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.9,
+  });
 
   for (const id of LONG_TAIL_NAV_ORDER) {
     const page = LONG_TAIL_PAGES[id];
