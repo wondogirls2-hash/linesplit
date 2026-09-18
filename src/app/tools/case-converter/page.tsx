@@ -82,30 +82,6 @@ export default function CaseConverterPage() {
         }}
       />
       <CaseConverterTool />
-      <section className="mx-auto max-w-3xl space-y-3 text-[15px] leading-relaxed text-muted-foreground">
-        <h2 className="text-lg font-semibold tracking-tight text-foreground">
-          Why use this case converter?
-        </h2>
-        <p>
-          Need UPPERCASE titles, lowercase cleanup, or Title Case headings without
-          rewriting meaning? This tool only changes letter case — nothing is sent
-          to a server. After converting, jump back to the{" "}
-          <Link
-            href="/"
-            className="font-medium text-primary underline-offset-2 hover:underline"
-          >
-            Paragraph Splitter
-          </Link>{" "}
-          for one sentence per line, or browse{" "}
-          <Link
-            href="/tools"
-            className="font-medium text-primary underline-offset-2 hover:underline"
-          >
-            all tools
-          </Link>
-          .
-        </p>
-      </section>
     </ToolPageShell>
   );
 }

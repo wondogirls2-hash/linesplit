@@ -43,6 +43,32 @@ export default function ContactPage() {
           <li>Browser and device (if reporting a bug)</li>
         </ul>
       </section>
+      <section className="space-y-2">
+        <h2 className="text-lg font-semibold text-foreground">Response time</h2>
+        <p>
+          We aim to reply within a few business days. Product feedback and bug
+          reports help us prioritize fixes. Feature ideas are welcome even if we
+          cannot ship every request.
+        </p>
+        <p>
+          For privacy details — including how ads and analytics relate to your
+          pasted text — see the{" "}
+          <a
+            href="/privacy-policy"
+            className="font-medium text-primary underline-offset-2 hover:underline"
+          >
+            Privacy Policy
+          </a>
+          . For why these tools exist, visit{" "}
+          <a
+            href="/about"
+            className="font-medium text-primary underline-offset-2 hover:underline"
+          >
+            About
+          </a>
+          .
+        </p>
+      </section>
     </LegalPageShell>
   );
 }

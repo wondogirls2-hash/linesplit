@@ -79,7 +79,7 @@ export default function ToolsIndexPage() {
         description="Every utility runs in your browser — split sentences, join broken lines, convert case, and clean lists without uploading a draft."
       />
 
-      <main className="flex-1">
+      <main className="flex-1 space-y-12">
         <ul className="grid gap-4 sm:grid-cols-2">
           {TOOL_NAV_ORDER.map((id) => {
             const tool = TOOLS[id];
@@ -100,6 +100,83 @@ export default function ToolsIndexPage() {
             );
           })}
         </ul>
+
+        <section className="mx-auto max-w-3xl space-y-8 text-[15px] leading-relaxed text-muted-foreground">
+          <div className="space-y-3">
+            <h2 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+              Private text utilities for everyday formatting
+            </h2>
+            <p>
+              ParagraphSplitter is a small toolkit for writers, editors,
+              translators, and anyone who pastes messy text from Word, PDFs, or
+              spreadsheets. Each tool does one job well — split paragraphs,
+              remove line breaks, drop duplicate lines, convert letter case, or
+              run bulk find and replace — without accounts, uploads, or AI
+              rewrites.
+            </p>
+            <p>
+              Everything processes on-device in your browser. Close the tab and
+              the draft is gone from our side, because it never left your
+              device. Start on the{" "}
+              <Link
+                href="/"
+                className="font-medium text-primary underline-offset-2 hover:underline"
+              >
+                homepage Paragraph Splitter
+              </Link>{" "}
+              for sentence-per-line formatting, or open a sister tool above when
+              you need cleanup first.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+              Suggested workflows
+            </h2>
+            <ul className="list-disc space-y-2.5 pl-5">
+              <li>
+                PDF paste looks chopped mid-sentence →{" "}
+                <Link
+                  href="/tools/remove-line-breaks"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  Remove Line Breaks
+                </Link>
+                , then split by sentence on the homepage.
+              </li>
+              <li>
+                Long list with repeated rows →{" "}
+                <Link
+                  href="/tools/remove-duplicate-lines"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  Remove Duplicate Lines
+                </Link>
+                .
+              </li>
+              <li>
+                Headings need Title Case or UPPERCASE →{" "}
+                <Link
+                  href="/tools/case-converter"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  Case Converter
+                </Link>
+                .
+              </li>
+              <li>
+                Many find/replace rules at once →{" "}
+                <Link
+                  href="/tools/find-and-replace"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  Find &amp; Replace
+                </Link>
+                .
+              </li>
+            </ul>
+          </div>
+        </section>
       </main>
 
       <SiteFooter />

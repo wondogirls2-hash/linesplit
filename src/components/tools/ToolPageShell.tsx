@@ -2,6 +2,8 @@ import { AdSlot } from "@/components/AdSlot";
 import { RelatedToolsCard } from "@/components/RelatedToolsCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { TOOL_SEO } from "@/lib/toolSeoContent";
 import type { ToolId } from "@/lib/toolsCatalog";
 
 type ToolPageShellProps = {
@@ -27,6 +29,8 @@ export function ToolPageShell({
   beforeTool,
   children,
 }: ToolPageShellProps) {
+  const seo = TOOL_SEO[toolId];
+
   return (
     <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-24 pt-6 sm:px-6 lg:px-8">
       <SiteHeader title={title} description={description} eyebrow={eyebrow} />
@@ -39,7 +43,10 @@ export function ToolPageShell({
         className="mb-6"
       />
 
-      <main className="flex-1 space-y-8">{children}</main>
+      <main className="flex-1 space-y-12">
+        {children}
+        {seo ? <ToolSeoSection content={seo} /> : null}
+      </main>
 
       <div className="mt-10">
         <RelatedToolsCard current={toolId} />
