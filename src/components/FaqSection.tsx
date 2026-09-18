@@ -12,14 +12,17 @@ export type FaqItem = {
 type FaqSectionProps = {
   items: FaqItem[];
   heading?: string;
+  /** Set false when the page already emits FAQPage JSON-LD (e.g. via @graph) */
+  includeJsonLd?: boolean;
 };
 
 /**
- * Visible FAQ + FAQPage JSON-LD in the initial HTML (Server Component).
+ * Visible FAQ + optional FAQPage JSON-LD in the initial HTML (Server Component).
  */
 export function FaqSection({
   items,
   heading = "Frequently asked questions",
+  includeJsonLd = true,
 }: FaqSectionProps) {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -36,13 +39,15 @@ export function FaqSection({
 
   return (
     <section aria-labelledby="faq-heading" className="space-y-5">
-      <script
-        id={`${SITE_NAME.toLowerCase()}-faq-jsonld`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+      {includeJsonLd ? (
+        <script
+          id={`${SITE_NAME.toLowerCase()}-faq-jsonld`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      ) : null}
       <h2
         id="faq-heading"
         className="text-lg font-semibold tracking-tight text-foreground sm:text-xl"

@@ -33,19 +33,45 @@ export const metadata: Metadata = buildPageMetadata({
 
 const FAQ: FaqItem[] = [
   {
-    question: "Is my pasted text stored or sent to a server?",
+    question: "How does the tool auto break text into paragraphs?",
     answer:
-      "No. All text parsing happens directly inside your web browser using client-side JavaScript. Your text is never stored or transmitted to our servers.",
+      "Paste your text and choose split criteria: by sentence (. ! ?) with abbreviation-aware detection, or by character count with word-boundary wrapping. The tool inserts line breaks in your browser so you can copy clean, readable segments without manual reformatting.",
+  },
+  {
+    question:
+      "How does the smart sentence splitter handle punctuation and abbreviations?",
+    answer:
+      "The sentence splitter detects natural boundaries — periods (.), question marks (?), and exclamation points (!). It protects common abbreviations such as Mr., Mrs., Dr., Prof., and patterns like U.S., U.K., and E.U. so those dots usually do not start a new line. Edge cases can still appear — edit the Result box if needed.",
+  },
+  {
+    question: "Can I merge fragmented lines into 1 paragraph?",
+    answer:
+      "Yes. If text copied from a PDF, email, or OCR scan has awkward mid-sentence wraps, use Remove Line Breaks on this site to strip unintended line breaks and recombine the text into one smooth paragraph, then return here if you need one sentence per line.",
+    answerContent: (
+      <>
+        Yes. If text copied from a PDF, email, or OCR scan has awkward
+        mid-sentence wraps, use{" "}
+        <Link
+          href="/tools/remove-line-breaks"
+          className="font-medium text-primary underline-offset-2 hover:underline"
+        >
+          Remove Line Breaks
+        </Link>{" "}
+        on this site to strip unintended line breaks and recombine the text into
+        one smooth paragraph, then return here if you need one sentence per
+        line.
+      </>
+    ),
+  },
+  {
+    question: "Is my text uploaded or stored on an external server?",
+    answer:
+      "No. All text manipulation, splitting, and formatting take place directly in your web browser via client-side JavaScript. None of your content is ever transmitted, logged, or saved to any server.",
   },
   {
     question: "Will this rewrite or change my wording?",
     answer:
       "No. ParagraphSplitter only inserts line breaks (and optional formatting like bullets). Your original words stay intact — no AI alterations.",
-  },
-  {
-    question: "How do I split a paragraph into sentences?",
-    answer:
-      "Paste your paragraph into the input box. The tool auto-splits on sentence boundaries (periods, question marks, exclamation points) with abbreviation-aware logic. Then copy the result.",
   },
   {
     question: "Can I split text by a specific character count?",
@@ -66,31 +92,6 @@ const FAQ: FaqItem[] = [
     question: "How do I split a paragraph into sentences in Word or Google Docs?",
     answer:
       "Copy the paragraph from Word or Docs, paste it here, convert, then copy the result and paste it back. The tool does not open Word itself — it prepares one-sentence-per-line text you can drop into any document.",
-  },
-  {
-    question: "Why does copy-pasting from a PDF break my paragraph formatting?",
-    answer:
-      "PDFs often insert hard line breaks mid-sentence, so pasted text looks chopped into short lines. Use ParagraphSplitter when you already have one long paragraph to split by sentence. If the paste is already broken into jagged lines, use Remove Line Breaks first to join them, then split again if you need one sentence per line.",
-    answerContent: (
-      <>
-        PDFs often insert hard line breaks mid-sentence, so pasted text looks
-        chopped into short lines. Use ParagraphSplitter when you already have
-        one long paragraph to split by sentence. If the paste is already broken
-        into jagged lines, use{" "}
-        <Link
-          href="/tools/remove-line-breaks"
-          className="font-medium text-primary underline-offset-2 hover:underline"
-        >
-          Remove Line Breaks
-        </Link>{" "}
-        first to join them, then split again if you need one sentence per line.
-      </>
-    ),
-  },
-  {
-    question: "What happens to abbreviations like Mr., Dr., or U.S.?",
-    answer:
-      "The splitter is abbreviation-aware. Common titles (Mr., Mrs., Dr., Prof.) and patterns like U.S., U.K., and E.U. are protected so their dots usually do not start a new line. Edge cases can still appear — edit the Result box manually, or click “fine-tune” to jump there.",
   },
   {
     question: "Does this sentence splitter work on mobile?",
@@ -148,26 +149,45 @@ const FAQ: FaqItem[] = [
   },
 ];
 
-const softwareAppJsonLd = {
+/** Single @graph JSON-LD — WebApplication + FAQPage (no duplicate FAQ script) */
+const structuredDataJsonLd = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: SITE_NAME,
-  applicationCategory: "UtilitiesApplication",
-  operatingSystem: "Any",
-  url: SITE_URL,
-  description:
-    "Free browser-based sentence splitter: add a line break after each period, split paragraphs into sentences, and format text without uploading content or using AI.",
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-  },
-  featureList: [
-    "Split paragraph into one sentence per line",
-    "Abbreviation-aware sentence detection",
-    "Character-limit wrapping presets",
-    "Optional bullets and line-break styles",
-    "Runs 100% in the browser — no upload",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": `${SITE_URL}/#webapp`,
+      name: SITE_NAME,
+      url: `${SITE_URL}/`,
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "All",
+      browserRequirements: "Requires JavaScript. Requires HTML5.",
+      description:
+        "Free online text tool to split paragraphs into sentences, wrap text by character count, or merge broken lines into one paragraph — instantly, in your browser.",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      featureList: [
+        "Smart sentence splitter with punctuation detection",
+        "Character-count wrapping at word boundaries",
+        "Optional bullets and blank-line spacing",
+        "Merge broken lines via Remove Line Breaks",
+        "Client-side processing with 100% data privacy",
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${SITE_URL}/#faq`,
+      mainEntity: FAQ.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    },
   ],
 };
 
@@ -175,10 +195,10 @@ export default function HomePage() {
   return (
     <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-24 pt-6 sm:px-6 lg:px-8">
       <script
-        id={`${SITE_NAME.toLowerCase()}-software-jsonld`}
+        id={`${SITE_NAME.toLowerCase()}-structured-data`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(softwareAppJsonLd).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(structuredDataJsonLd).replace(/</g, "\\u003c"),
         }}
       />
 
@@ -209,7 +229,7 @@ export default function HomePage() {
 
         <SeoContentSection />
 
-        <FaqSection items={FAQ} />
+        <FaqSection items={FAQ} includeJsonLd={false} />
       </main>
 
       <SiteFooter />
