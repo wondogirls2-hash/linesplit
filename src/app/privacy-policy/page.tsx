@@ -6,8 +6,8 @@ import { CONTACT_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Privacy Policy",
-  description: `How ${SITE_NAME} handles your text, cookies, and Google AdSense advertising.`,
-  keywords: ["privacy policy", "cookies", "AdSense", SITE_NAME],
+  description: `How ${SITE_NAME} handles your text, cookies, Google Analytics, and AdSense advertising.`,
+  keywords: ["privacy policy", "cookies", "AdSense", "Google Analytics", SITE_NAME],
   path: "/privacy-policy",
 });
 
@@ -37,24 +37,28 @@ export default function PrivacyPolicyPage() {
 
       <section className="space-y-2">
         <h2 className="text-lg font-semibold text-foreground">
-          2. Advertising is separate from your documents
+          2. Analytics &amp; advertising are separate from your documents
         </h2>
         <p>
-          {SITE_NAME} may display ads through{" "}
+          {SITE_NAME} uses{" "}
+          <strong className="font-semibold text-foreground">
+            Google Analytics (GA4)
+          </strong>{" "}
+          for aggregate traffic measurement (for example page views). With your
+          consent, we may also display ads through{" "}
           <strong className="font-semibold text-foreground">
             Google AdSense
           </strong>{" "}
-          to keep the tools free. AdSense can use cookies and device or
-          connection information to deliver, measure, and (where allowed)
-          personalize ads.
+          to keep the tools free. These services can use cookies and device or
+          connection information.
         </p>
         <p>
           <strong className="font-semibold text-foreground">
             Important distinction:
           </strong>{" "}
-          advertising technology does{" "}
+          analytics and advertising technology do{" "}
           <em className="not-italic font-medium text-foreground">not</em> receive
-          the paragraphs or documents you paste into our tools. Ad cookies and
+          the paragraphs or documents you paste into our tools. Cookies and
           device signals are unrelated to your text content. Declining ads does
           not reduce the functionality of the converters.
         </p>
@@ -67,6 +71,15 @@ export default function PrivacyPolicyPage() {
             rel="noopener noreferrer"
           >
             Google&apos;s advertising / ads technologies policy
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://policies.google.com/privacy"
+            className="font-medium text-primary underline-offset-2 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Google&apos;s Privacy Policy
           </a>
           .
         </p>
@@ -77,11 +90,14 @@ export default function PrivacyPolicyPage() {
           3. Cookies &amp; consent
         </h2>
         <p>
-          On your first visit we show a consent banner. Choosing{" "}
+          On your first visit we show a consent banner for advertising. Choosing{" "}
           <strong className="font-semibold text-foreground">Accept</strong>{" "}
-          allows AdSense scripts and ad cookies to load. Choosing{" "}
+          allows AdSense-related ad cookies/scripts used for ad delivery.
+          Choosing{" "}
           <strong className="font-semibold text-foreground">Reject</strong>{" "}
-          keeps the site fully usable without loading advertising scripts.
+          keeps the converters fully usable without loading advertising.
+          Google Analytics for aggregate site traffic may still load separately
+          from ad consent.
         </p>
         <p>
           We also store a small preference flag in localStorage so we remember

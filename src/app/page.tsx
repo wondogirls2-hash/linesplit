@@ -4,6 +4,7 @@ import { AdSlot } from "@/components/AdSlot";
 import { FaqSection, type FaqItem } from "@/components/FaqSection";
 import { OppositeToolBanner } from "@/components/OppositeToolBanner";
 import { RelatedToolsCard } from "@/components/RelatedToolsCard";
+import { SeoContentSection } from "@/components/SeoContentSection";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TextConverter } from "@/components/TextConverter";
@@ -12,25 +13,29 @@ import { buildPageMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Sentence Splitter Online — Add Line Break After Period",
+  title: "Text & Paragraph Splitter | Split Text by Sentences, Length, or Lines",
   description:
-    "Stop adding a line break after every period by hand. Split a paragraph into sentences online — free, private, no signup, no AI rewrite. Works in your browser with Word, Docs, and PDF paste-ups.",
+    "Free online text splitter. Break long essays, articles, and AI prompts into readable paragraphs, sentences, or character counts instantly — all in your browser.",
   keywords: [
-    "Add line break after period",
-    "Sentence splitter online",
-    "Format text sentence by sentence",
-    "Split paragraph into sentences",
-    "How to split a paragraph into sentences",
-    "Line break after every period",
+    "paragraph splitter",
+    "text splitter",
+    "split text by line",
+    "split sentences online",
+    "bulk text chunker",
+    "paragraph break generator",
   ],
   path: "",
+  absoluteTitle: true,
+  openGraphTitle: "Online Paragraph & Text Splitter - Fast, Free & Private",
+  openGraphDescription:
+    "Split large text chunks by characters or sentences. Perfect for copywriters, bloggers, and LLM prompt formatting.",
 });
 
 const FAQ: FaqItem[] = [
   {
-    question: "Does ParagraphSplitter send my text to a server?",
+    question: "Is my pasted text stored or sent to a server?",
     answer:
-      "No. All conversion runs in your browser. Your paragraph is never uploaded, stored on a server, or sent to an AI model.",
+      "No. All text parsing happens directly inside your web browser using client-side JavaScript. Your text is never stored or transmitted to our servers.",
   },
   {
     question: "Will this rewrite or change my wording?",
@@ -43,9 +48,14 @@ const FAQ: FaqItem[] = [
       "Paste your paragraph into the input box. The tool auto-splits on sentence boundaries (periods, question marks, exclamation points) with abbreviation-aware logic. Then copy the result.",
   },
   {
-    question: "Can I wrap text by character count instead?",
+    question: "Can I split text by a specific character count?",
     answer:
-      "Yes. Switch to “By character limit” and use presets like SEO Meta (160), Tweet/X (280), or Code Line (80). You can also set a custom limit between 10 and 2000 characters.",
+      "Yes. Set your desired character limit (presets like SEO Meta 160, Tweet/X 280, Code Line 80, or a custom value), and the tool will split the text smoothly at word boundaries without truncating words.",
+  },
+  {
+    question: "Does this tool support multiple languages?",
+    answer:
+      "Yes. Our tool is built with full UTF-8 support, making it compatible with global languages and special symbols — including Latin scripts and non-Latin scripts such as Korean, Japanese, Chinese, and Cyrillic.",
   },
   {
     question: "How do I add a line break after every period?",
@@ -180,7 +190,11 @@ export default function HomePage() {
 
       <OppositeToolBanner target="remove-line-breaks" />
 
-      <AdSlot position="top-banner" slotId="paragraphsplitter-top" className="mb-6" />
+      <AdSlot
+        position="top-banner"
+        slotId="paragraphsplitter-top"
+        className="mb-6"
+      />
 
       <main className="flex-1 space-y-12">
         {/* Tool stays above the fold — SEO copy follows below */}
@@ -193,91 +207,7 @@ export default function HomePage() {
 
         <WhyUseSection />
 
-        <section
-          aria-labelledby="how-it-works-heading"
-          className="glass-panel px-6 py-8"
-        >
-          <h2
-            id="how-it-works-heading"
-            className="text-lg font-semibold text-foreground"
-          >
-            How it works
-          </h2>
-          <ol className="mt-5 grid gap-4 text-sm text-muted-foreground sm:grid-cols-3">
-            <li className="flex gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">
-                1
-              </span>
-              <span>
-                <strong className="text-foreground">Paste</strong> text copied
-                from a PDF, Word doc, Google Doc, or email that is one long
-                unbroken paragraph — or any block you want sentence-per-line.
-              </span>
-            </li>
-            <li className="flex gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">
-                2
-              </span>
-              <span>
-                <strong className="text-foreground">Convert</strong> instantly —
-                abbreviation-aware sentence detection runs locally. Or switch
-                to character-limit mode when you need length wrapping instead.
-              </span>
-            </li>
-            <li className="flex gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">
-                3
-              </span>
-              <span>
-                <strong className="text-foreground">Fine-tune &amp; copy</strong>{" "}
-                — edit any line in the Result box, optionally add bullets, then
-                paste into your document, slides, or caption tool.
-              </span>
-            </li>
-          </ol>
-
-          <div className="mt-8 border-t border-border/50 pt-6">
-            <h3 className="text-sm font-semibold text-foreground">
-              Common use cases
-            </h3>
-            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted-foreground">
-              <li>
-                Formatting paragraphs for teleprompters or speaker notes (one
-                sentence per line)
-              </li>
-              <li>
-                Cleaning OCR or PDF paste-ups — join broken lines with{" "}
-                <Link
-                  href="/tools/remove-line-breaks"
-                  className="font-medium text-primary underline-offset-2 hover:underline"
-                >
-                  Remove Line Breaks
-                </Link>
-                , then split by sentence here
-              </li>
-              <li>
-                Prepping text for translation tools that work better
-                sentence-by-sentence
-              </li>
-              <li>
-                Turning a dense paragraph into dash or bullet lines for slides
-              </li>
-              <li>
-                Subtitle or caption drafting where each spoken sentence needs
-                its own line
-              </li>
-              <li>
-                Deduping pasted lists afterward with{" "}
-                <Link
-                  href="/tools/remove-duplicate-lines"
-                  className="font-medium text-primary underline-offset-2 hover:underline"
-                >
-                  Remove Duplicates
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </section>
+        <SeoContentSection />
 
         <FaqSection items={FAQ} />
       </main>

@@ -1,26 +1,51 @@
 import type { MetadataRoute } from "next";
+import { LONG_TAIL_NAV_ORDER, LONG_TAIL_PAGES } from "@/lib/longTailPages";
 import { SITE_URL } from "@/lib/site";
 import { TOOL_NAV_ORDER, TOOLS } from "@/lib/toolsCatalog";
 
 /**
- * App Router sitemap — tool routes are derived from TOOLS so new tools
- * appear automatically when added to toolsCatalog.
+ * App Router sitemap — tool routes + long-tail SEO landings.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const toolPaths = TOOL_NAV_ORDER.map((id) => TOOLS[id].href).filter(
-    (href) => href !== "/"
-  );
-
-  const staticPaths = ["/privacy-policy", "/about", "/contact"];
-
-  const routes = ["", ...toolPaths, ...staticPaths];
   const lastModified = new Date();
+  const entries: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 1,
+    },
+  ];
 
-  return routes.map((path) => ({
-    url: `${SITE_URL}${path}`,
-    lastModified,
-    changeFrequency: path === "" ? "weekly" : "monthly",
-    priority:
-      path === "" ? 1 : path.startsWith("/tools") ? 0.8 : 0.5,
-  }));
+  for (const id of TOOL_NAV_ORDER) {
+    const href = TOOLS[id]?.href;
+    if (!href || href === "/") continue;
+    entries.push({
+      url: `${SITE_URL}${href}`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    });
+  }
+
+  for (const id of LONG_TAIL_NAV_ORDER) {
+    const page = LONG_TAIL_PAGES[id];
+    entries.push({
+      url: `${SITE_URL}${page.href}`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    });
+  }
+
+  for (const path of ["/privacy-policy", "/about", "/contact"]) {
+    entries.push({
+      url: `${SITE_URL}${path}`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    });
+  }
+
+  return entries;
 }

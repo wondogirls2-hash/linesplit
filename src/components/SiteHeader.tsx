@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GuidesNav } from "@/components/GuidesNav";
 import { Nav } from "@/components/Nav";
 import { PrivacyBadge } from "@/components/PrivacyBadge";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -27,7 +28,10 @@ export function SiteHeader({ title, description, eyebrow }: SiteHeaderProps) {
         </div>
       </div>
 
-      <Nav />
+      <div className="space-y-1.5">
+        <Nav />
+        <GuidesNav />
+      </div>
 
       <div className="max-w-2xl space-y-2">
         {eyebrow && (

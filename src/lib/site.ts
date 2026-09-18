@@ -1,6 +1,14 @@
+function canonicalOrigin() {
+  const raw = (process.env.NEXT_PUBLIC_SITE_URL || "https://paragraphsplitter.com").trim();
+  try {
+    return new URL(raw).origin;
+  } catch {
+    return "https://paragraphsplitter.com";
+  }
+}
+
 /** Canonical site URL for sitemap / OG / metadata */
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://paragraphsplitter.com";
+export const SITE_URL = canonicalOrigin();
 
 /** Display brand — matches production domain */
 export const SITE_NAME = "ParagraphSplitter";
@@ -18,7 +26,14 @@ export const ADSENSE_CLIENT_ID =
   process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID?.trim() ||
   "ca-pub-1340602350988403";
 
+/** Google Analytics 4 measurement id (G-…) */
+export const GA_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-Q201V9ER29";
+
 export const FOOTER_LINKS = [
+  { href: "/split-text-by-sentence", label: "Split by Sentence" },
+  { href: "/split-text-by-line", label: "Split by Line" },
+  { href: "/ai-prompt-splitter", label: "AI Prompt Splitter" },
   { href: "/privacy-policy", label: "Privacy Policy" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

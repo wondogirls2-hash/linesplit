@@ -19,9 +19,10 @@ export function CookieConsentBanner() {
         <div className="max-w-3xl space-y-1.5 text-sm text-muted-foreground">
           <p className="font-semibold text-foreground">Cookies &amp; ads</p>
           <p>
-            Your pasted text always stays in your browser. Separately, if you
-            accept, we may show Google AdSense ads that use cookies or device
-            info for delivery and measurement — never your document content.{" "}
+            Your pasted text always stays in your browser. We use Google
+            Analytics for aggregate page traffic (not your document content).
+            Separately, if you accept, we may show Google AdSense ads that use
+            cookies or device info for delivery and measurement.{" "}
             <Link
               href="/privacy-policy"
               className="font-medium text-primary underline-offset-2 hover:underline"

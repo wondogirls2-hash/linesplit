@@ -14,11 +14,19 @@ import { toast } from "@/components/ui/sonner";
 
 const DEBOUNCE_MS = 250;
 
-export function TextConverter() {
+type TextConverterProps = {
+  /** Override default options (e.g. char mode on long-tail landings) */
+  initialOptions?: Partial<ConvertOptions>;
+};
+
+export function TextConverter({ initialOptions }: TextConverterProps) {
   const [source, setSource] = useState("");
   const [result, setResult] = useState("");
   const [resultDirty, setResultDirty] = useState(false);
-  const [options, setOptions] = useState<ConvertOptions>(DEFAULT_OPTIONS);
+  const [options, setOptions] = useState<ConvertOptions>(() => ({
+    ...DEFAULT_OPTIONS,
+    ...initialOptions,
+  }));
   const [modKey, setModKey] = useState("Ctrl");
   const { items: history, push: pushHistory, clear: clearHistoryItems } =
     useHistory("paragraph-splitter");

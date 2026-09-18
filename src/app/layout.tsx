@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import {
   ADSENSE_CLIENT_ID,
+  GA_MEASUREMENT_ID,
   OG_IMAGE_PATH,
   SITE_NAME,
   SITE_URL,
@@ -15,14 +16,26 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Sentence splitter online`,
+    default:
+      "Text & Paragraph Splitter | Split Text by Sentences, Length, or Lines",
     template: `%s — ${SITE_NAME}`,
   },
   description:
-    "Free privacy-first text tools: sentence splitter, remove line breaks, find & replace, and more. Runs 100% in your browser.",
+    "Free online text splitter. Break long essays, articles, and AI prompts into readable paragraphs, sentences, character counts, or custom delimiters instantly.",
+  keywords: [
+    "paragraph splitter",
+    "text splitter",
+    "split text by line",
+    "split sentences online",
+    "bulk text chunker",
+    "paragraph break generator",
+  ],
   openGraph: {
     siteName: SITE_NAME,
     type: "website",
+    title: "Online Paragraph & Text Splitter - Fast, Free & Private",
+    description:
+      "Split large text chunks by characters, lines, or sentences. Perfect for copywriters, bloggers, and LLM prompt formatting.",
     images: [
       {
         url: OG_IMAGE_PATH,
@@ -34,6 +47,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    title: "Online Paragraph & Text Splitter - Fast, Free & Private",
+    description:
+      "Split large text chunks by characters, lines, or sentences. Perfect for copywriters, bloggers, and LLM prompt formatting.",
     images: [OG_IMAGE_PATH],
   },
 };
@@ -51,6 +67,22 @@ export default function RootLayout({
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
           crossOrigin="anonymous"
+        />
+        {/* Google Analytics (gtag.js) — must be in HTML for GA property verification */}
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        />
+        <script
+          id="gtag-init"
+          dangerouslySetInnerHTML={{
+            __html: `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');
+`.trim(),
+          }}
         />
       </head>
       <body className="min-h-screen font-sans">
@@ -71,3 +103,4 @@ export default function RootLayout({
     </html>
   );
 }
+
