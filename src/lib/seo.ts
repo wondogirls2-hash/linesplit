@@ -24,7 +24,14 @@ export function buildPageMetadata({
   openGraphTitle,
   openGraphDescription,
 }: BuildMetadataInput): Metadata {
-  const url = `${SITE_URL}${path}`;
+  // Prefer trailing slash only on the site root; strip elsewhere
+  const normalizedPath =
+    !path || path === "/"
+      ? "/"
+      : path.startsWith("/")
+        ? path.replace(/\/$/, "")
+        : `/${path.replace(/\/$/, "")}`;
+  const url = `${SITE_URL}${normalizedPath === "/" ? "/" : normalizedPath}`;
   const fullTitle =
     absoluteTitle || title.includes(SITE_NAME)
       ? title
@@ -33,12 +40,19 @@ export function buildPageMetadata({
   const ogDescription = openGraphDescription ?? description;
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: {
       absolute: fullTitle,
     },
     description,
     keywords,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      // Explicit self-reference — helps when Google previously chose a foreign host
+      languages: {
+        "x-default": url,
+      },
+    },
     openGraph: {
       title: ogTitle,
       description: ogDescription,
@@ -60,6 +74,14 @@ export function buildPageMetadata({
       title: ogTitle,
       description: ogDescription,
       images: [`${SITE_URL}${OG_IMAGE_PATH}`],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
     },
     other: {
       "og:site_name": SITE_NAME,

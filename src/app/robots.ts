@@ -8,5 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
+    // Preferred host signal for crawlers that still honor Host
+    host: SITE_URL,
   };
 }

@@ -15,6 +15,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: `${SITE_URL}/`,
+  },
   title: {
     default:
       "Text & Paragraph Splitter | Split Text by Sentences, Length, or Lines",
@@ -33,6 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: SITE_NAME,
     type: "website",
+    url: `${SITE_URL}/`,
     title: "Online Paragraph & Text Splitter - Fast, Free & Private",
     description:
       "Split large text chunks by characters, lines, or sentences. Perfect for copywriters, bloggers, and LLM prompt formatting.",
@@ -51,6 +55,10 @@ export const metadata: Metadata = {
     description:
       "Split large text chunks by characters, lines, or sentences. Perfect for copywriters, bloggers, and LLM prompt formatting.",
     images: [OG_IMAGE_PATH],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -82,6 +90,26 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${GA_MEASUREMENT_ID}');
 `.trim(),
+          }}
+        />
+        {/* Site identity JSON-LD — reinforces preferred host vs foreign canonical confusion */}
+        <script
+          id="website-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "@id": `${SITE_URL}/#website`,
+              name: SITE_NAME,
+              url: `${SITE_URL}/`,
+              inLanguage: "en",
+              publisher: {
+                "@type": "Organization",
+                name: SITE_NAME,
+                url: `${SITE_URL}/`,
+              },
+            }).replace(/</g, "\\u003c"),
           }}
         />
       </head>
