@@ -1,25 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  async redirects() {
-    return [
-      // Explicit 301 (not 308) so Google treats host moves as permanent
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.paragraphsplitter.com" }],
-        destination: "https://paragraphsplitter.com/:path*",
-        permanent: true,
-        statusCode: 301,
-      },
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "linesplit.vercel.app" }],
-        destination: "https://paragraphsplitter.com/:path*",
-        permanent: true,
-        statusCode: 301,
-      },
-    ];
-  },
+  // Host redirects (www / preview → apex HTTPS 301) live in vercel.json
+  // so the edge returns a true 301, not Next's default 308.
   async headers() {
     return [
       {
