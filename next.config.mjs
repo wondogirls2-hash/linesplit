@@ -22,6 +22,16 @@ const nextConfig = {
           },
         ],
       },
+      // Allow third-party sites to iframe the embed widget
+      {
+        source: "/embed",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors *",
+          },
+        ],
+      },
     ];
   },
 };

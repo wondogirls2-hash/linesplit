@@ -34,6 +34,7 @@ export const FOOTER_LINKS = [
   { href: "/split-text-by-sentence", label: "Split by Sentence" },
   { href: "/split-text-by-line", label: "Split by Line" },
   { href: "/ai-prompt-splitter", label: "AI Prompt Splitter" },
+  { href: "/developers", label: "Embed / Extension" },
   { href: "/privacy-policy", label: "Privacy Policy" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ParagraphSplitter</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="header">
+      <strong>ParagraphSplitter</strong>
+      <span class="sub">One sentence per line</span>
+    </header>
+
+    <label class="label" for="input">Paste text</label>
+    <textarea id="input" rows="6" placeholder="Paste a paragraph…"></textarea>
+
+    <div class="row">
+      <button type="button" id="split" class="btn primary">Split</button>
+      <button type="button" id="copy" class="btn" disabled>Copy</button>
+      <button type="button" id="clear" class="btn ghost">Clear</button>
+    </div>
+
+    <label class="label" for="output">Result</label>
+    <textarea id="output" rows="6" readonly placeholder="Result appears here…"></textarea>
+
+    <a
+      id="cta"
+      class="cta"
+      href="https://paragraphsplitter.com/?utm_source=chrome_extension&utm_medium=popup&utm_campaign=more_features"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      More features → paragraphsplitter.com
+    </a>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

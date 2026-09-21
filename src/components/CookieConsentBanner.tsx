@@ -1,12 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAdConsent } from "@/components/AdConsentProvider";
 import { Button } from "@/components/ui/button";
 
 export function CookieConsentBanner() {
+  const pathname = usePathname();
   const { ready, status, accept, reject } = useAdConsent();
 
+  // Keep iframe embeds clean — no consent chrome inside widgets
+  if (pathname === "/embed" || pathname.startsWith("/embed/")) return null;
   if (!ready || status !== "pending") return null;
 
   return (

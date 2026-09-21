@@ -45,12 +45,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  for (const path of ["/privacy-policy", "/about", "/contact"]) {
+  for (const path of ["/privacy-policy", "/about", "/contact", "/developers"]) {
     entries.push({
       url: `${SITE_URL}${path}`,
       lastModified,
       changeFrequency: "monthly",
-      priority: 0.5,
+      priority: path === "/developers" ? 0.7 : 0.5,
     });
   }
 
