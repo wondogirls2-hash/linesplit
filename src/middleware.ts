@@ -1,38 +1,47 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { SITE_URL } from "@/lib/site";
 
+const APEX_HOST = "paragraphsplitter.com";
+
 /**
- * Emit an HTTP Link: rel="canonical" header on every HTML response.
- * Reinforces self-referencing canonicals when Google has historically
- * preferred a wrong host (expired-domain / soft-404 confusion).
+ * 1) Force a single host: https://paragraphsplitter.com (301)
+ * 2) Emit Link: rel="canonical" on HTML responses
+ *
+ * Consolidates www → apex with an explicit 301 so Google prefers one URL.
+ * HTTP → HTTPS is handled by Vercel; next.config also declares 301 www rules.
  */
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const hostHeader = request.headers.get("host")?.toLowerCase() ?? "";
+  const hostname = hostHeader.split(":")[0];
+  const { pathname, search } = request.nextUrl;
 
-  // Skip Next internals and static assets
+  // www → apex HTTPS with permanent 301
+  if (hostname === `www.${APEX_HOST}`) {
+    const target = new URL(
+      `https://${APEX_HOST}${pathname === "/" ? "/" : pathname}${search}`
+    );
+    return NextResponse.redirect(target, 301);
+  }
+
+  // Skip Next internals / static assets for header injection
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
-    pathname.includes(".") // favicon, robots.txt served separately, images, etc.
+    /\.[a-zA-Z0-9]+$/.test(pathname)
   ) {
     return NextResponse.next();
   }
 
+  // Self-referencing canonical (trailing slash only on site root)
   const canonicalPath = pathname === "/" ? "/" : pathname.replace(/\/$/, "");
   const canonical = `${SITE_URL}${canonicalPath}`;
 
   const response = NextResponse.next();
   response.headers.set("Link", `<${canonical}>; rel="canonical"`);
-  // Discourage caches/proxies from rewriting host identity
-  response.headers.set("X-Robots-Tag", "all");
+  response.headers.set("X-Robots-Tag", "index, follow");
   return response;
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all paths except static files and Next internals.
-     */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

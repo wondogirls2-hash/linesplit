@@ -24,7 +24,7 @@ export const metadata: Metadata = buildPageMetadata({
     "bulk text chunker",
     "paragraph break generator",
   ],
-  path: "",
+  path: "/",
   absoluteTitle: true,
   openGraphTitle: "Online Paragraph & Text Splitter - Fast, Free & Private",
   openGraphDescription:
