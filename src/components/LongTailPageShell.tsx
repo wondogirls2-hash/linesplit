@@ -18,15 +18,51 @@ type LongTailPageShellProps = {
 export function LongTailPageShell({ page }: LongTailPageShellProps) {
   const webPageJsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: page.title,
-    description: page.description,
-    url: `${SITE_URL}${page.href}`,
-    isPartOf: {
-      "@type": "WebSite",
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
+    "@graph": [
+      {
+        "@type": "WebPage",
+        name: page.title,
+        description: page.description,
+        url: `${SITE_URL}${page.href}`,
+        isPartOf: {
+          "@type": "WebSite",
+          name: SITE_NAME,
+          url: SITE_URL,
+        },
+      },
+      {
+        "@type": "WebApplication",
+        name: page.heading,
+        url: `${SITE_URL}${page.href}`,
+        applicationCategory: "UtilitiesApplication",
+        operatingSystem: "Web",
+        description: page.description,
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+        },
+      },
+    ],
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: `${SITE_URL}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: page.heading,
+        item: `${SITE_URL}${page.href}`,
+      },
+    ],
   };
 
   return (
@@ -36,6 +72,13 @@ export function LongTailPageShell({ page }: LongTailPageShellProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(webPageJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        id={`${page.id}-breadcrumb-jsonld`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
         }}
       />
 
@@ -86,17 +129,91 @@ export function LongTailPageShell({ page }: LongTailPageShellProps) {
                 </li>
               ))}
             </ol>
-            <p>
-              Prefer the main hub? Open the{" "}
-              <Link
-                href="/"
-                className="font-medium text-primary underline-offset-2 hover:underline"
-              >
-                Paragraph Splitter homepage
-              </Link>
-              .
-            </p>
           </div>
+
+          {page.example ? (
+            <div className="space-y-3">
+              <h2 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+                {page.example.heading}
+              </h2>
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    {page.example.beforeLabel}
+                  </p>
+                  <pre className="whitespace-pre-wrap rounded-lg border border-border/60 bg-muted/40 p-3 font-sans text-[14px] leading-relaxed text-foreground">
+                    {page.example.before}
+                  </pre>
+                </div>
+                <div className="space-y-1.5">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    {page.example.afterLabel}
+                  </p>
+                  <pre className="whitespace-pre-wrap rounded-lg border border-border/60 bg-muted/40 p-3 font-sans text-[14px] leading-relaxed text-foreground">
+                    {page.example.after}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {page.useCases?.length ? (
+            <div className="space-y-3">
+              <h2 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+                Popular use cases
+              </h2>
+              <ul className="list-disc space-y-2.5 pl-5">
+                {page.useCases.map((item) => (
+                  <li key={item.title}>
+                    <strong className="font-semibold text-foreground">
+                      {item.title}:
+                    </strong>{" "}
+                    {item.body}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {page.relatedLinks?.length ? (
+            <div className="space-y-3">
+              <h2 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+                Related guides
+              </h2>
+              <ul className="list-disc space-y-2.5 pl-5">
+                {page.relatedLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="font-medium text-primary underline-offset-2 hover:underline"
+                    >
+                      {link.label}
+                    </Link>
+                    {" — "}
+                    {link.blurb}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          <p>
+            Prefer the main hub? Open the{" "}
+            <Link
+              href="/"
+              className="font-medium text-primary underline-offset-2 hover:underline"
+            >
+              Paragraph Splitter homepage
+            </Link>{" "}
+            or browse the{" "}
+            <Link
+              href="/tools"
+              className="font-medium text-primary underline-offset-2 hover:underline"
+            >
+              tools directory
+            </Link>
+            .
+          </p>
         </section>
 
         <FaqSection items={page.faqs} />

@@ -8,7 +8,6 @@ const page = LONG_TAIL_PAGES["ai-prompt-splitter"];
 export const metadata: Metadata = buildPageMetadata({
   title: page.title,
   description: page.description,
-  keywords: page.keywords,
   path: page.href,
   absoluteTitle: true,
   openGraphTitle: page.openGraphTitle,

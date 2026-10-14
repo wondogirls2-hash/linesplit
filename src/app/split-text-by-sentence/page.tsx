@@ -8,7 +8,6 @@ const page = LONG_TAIL_PAGES["split-text-by-sentence"];
 export const metadata: Metadata = buildPageMetadata({
   title: page.title,
   description: page.description,
-  keywords: page.keywords,
   path: page.href,
   absoluteTitle: true,
   openGraphTitle: page.openGraphTitle,

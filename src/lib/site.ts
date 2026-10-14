@@ -38,9 +38,9 @@ export const ADS_ENABLED =
   process.env.NEXT_PUBLIC_ADS_ENABLED?.trim().toLowerCase() === "true";
 
 export const FOOTER_LINKS = [
-  { href: "/split-text-by-sentence", label: "Split by Sentence" },
-  { href: "/split-text-by-line", label: "Split by Line" },
-  { href: "/ai-prompt-splitter", label: "AI Prompt Splitter" },
+  { href: "/split-text-into-paragraphs", label: "Split into Paragraphs" },
+  { href: "/split-paragraph-into-sentences", label: "Split into Sentences" },
+  { href: "/ai-prompt-splitter", label: "ChatGPT Prompt Splitter" },
   { href: "/developers", label: "Embed / Extension" },
   { href: "/privacy-policy", label: "Privacy Policy" },
   { href: "/about", label: "About" },

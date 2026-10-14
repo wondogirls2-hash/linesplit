@@ -131,6 +131,50 @@ export default function ToolsIndexPage() {
 
           <div className="space-y-3">
             <h2 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+              Guides &amp; landings
+            </h2>
+            <ul className="list-disc space-y-2.5 pl-5">
+              <li>
+                <Link
+                  href="/split-text-into-paragraphs"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  Split text into paragraphs
+                </Link>{" "}
+                — balanced blocks or N sentences per paragraph.
+              </li>
+              <li>
+                <Link
+                  href="/split-paragraph-into-sentences"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  Split a paragraph into sentences
+                </Link>{" "}
+                — one sentence per line.
+              </li>
+              <li>
+                <Link
+                  href="/add-line-break-after-period"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  Add a line break after every period
+                </Link>{" "}
+                — without a blind find-and-replace.
+              </li>
+              <li>
+                <Link
+                  href="/ai-prompt-splitter"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  ChatGPT prompt splitter
+                </Link>{" "}
+                — chunk long pastes before you send them to a model.
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
               Suggested workflows
             </h2>
             <ul className="list-disc space-y-2.5 pl-5">

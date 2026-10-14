@@ -52,6 +52,23 @@ export default function AboutPage() {
           </li>
         </ul>
       </section>
+
+      <section className="space-y-2">
+        <h2 className="text-lg font-semibold text-foreground">Who runs this site</h2>
+        <p>
+          {SITE_NAME} is an independently operated mini-toolkit for English-language
+          text formatting. There is no account system and no team that reviews your
+          pasted drafts — conversion never reaches our servers. For questions,
+          partnerships, or AdSense notes, use the contact email listed on the{" "}
+          <a
+            href="/contact"
+            className="font-medium text-primary underline-offset-2 hover:underline"
+          >
+            Contact
+          </a>{" "}
+          page.
+        </p>
+      </section>
     </LegalPageShell>
   );
 }
