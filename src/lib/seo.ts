@@ -4,7 +4,7 @@ import { OG_IMAGE_PATH, SITE_NAME, SITE_URL } from "@/lib/site";
 type BuildMetadataInput = {
   title: string;
   description: string;
-  keywords: string[];
+  keywords?: string[];
   path?: string;
   /** Use `title` as-is (no `— SITE_NAME` suffix) */
   absoluteTitle?: boolean;
@@ -45,10 +45,9 @@ export function buildPageMetadata({
       absolute: fullTitle,
     },
     description,
-    keywords,
+    ...(keywords?.length ? { keywords } : {}),
     alternates: {
       canonical: url,
-      // Explicit self-reference — helps when Google previously chose a foreign host
       languages: {
         "x-default": url,
       },

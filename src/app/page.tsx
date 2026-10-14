@@ -13,29 +13,26 @@ import { buildPageMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Text & Paragraph Splitter | Split Text by Sentences, Length, or Lines",
+  title: "Paragraph Splitter: Split Text into Paragraphs or Sentences",
   description:
-    "Free online text splitter. Break long essays, articles, and AI prompts into readable paragraphs, sentences, or character counts instantly — all in your browser.",
-  keywords: [
-    "paragraph splitter",
-    "text splitter",
-    "split text by line",
-    "split sentences online",
-    "bulk text chunker",
-    "paragraph break generator",
-  ],
+    "Free online paragraph splitter. Split long text into paragraphs, sentences, or fixed lengths in seconds. Runs 100% in your browser, with no upload and no AI rewrite.",
   path: "/",
   absoluteTitle: true,
-  openGraphTitle: "Online Paragraph & Text Splitter - Fast, Free & Private",
+  openGraphTitle: "Paragraph Splitter: Split Text into Paragraphs or Sentences",
   openGraphDescription:
-    "Split large text chunks by characters or sentences. Perfect for copywriters, bloggers, and LLM prompt formatting.",
+    "Free online paragraph splitter. Split long text into paragraphs, sentences, or fixed lengths in seconds. Runs 100% in your browser, with no upload and no AI rewrite.",
 });
 
 const FAQ: FaqItem[] = [
   {
+    question: "How do I split a long paragraph into two paragraphs?",
+    answer:
+      "Choose “Into N paragraphs”, set the count to 2, and paste your text. The tool splits only at sentence boundaries and balances paragraph length as evenly as possible. You can also use “By sentences / paragraph” (for example, 3 sentences per paragraph) when you want a fixed sentence count in each block.",
+  },
+  {
     question: "How does the tool auto break text into paragraphs?",
     answer:
-      "Paste your text and choose split criteria: by sentence (. ! ?) with abbreviation-aware detection, or by character count with word-boundary wrapping. The tool inserts line breaks in your browser so you can copy clean, readable segments without manual reformatting.",
+      "Paste your text and choose a mode: by sentence, by character limit, by sentences per paragraph, or into N paragraphs. Abbreviation-aware detection protects titles like Mr. and U.S. Everything runs in your browser so you can copy clean segments without uploading a draft.",
   },
   {
     question:
@@ -204,8 +201,8 @@ export default function HomePage() {
 
       <SiteHeader
         eyebrow="Paragraph Splitter"
-        title="Paste a paragraph. Get one sentence per line."
-        description="Built for Word, Google Docs, and slides — split text into clean lines without ChatGPT, without prompts, and without sending a single character to a server."
+        title="Split Text into Paragraphs or Sentences"
+        description="Paste a paragraph. Get one sentence per line. Built for Word, Google Docs, and slides — split into sentences or balanced paragraphs without ChatGPT, without prompts, and without sending a single character to a server."
       />
 
       <OppositeToolBanner target="remove-line-breaks" />

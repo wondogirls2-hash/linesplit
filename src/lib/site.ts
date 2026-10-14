@@ -30,6 +30,13 @@ export const ADSENSE_CLIENT_ID =
 export const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-Q201V9ER29";
 
+/**
+ * When false (default), ad containers are not rendered — avoids "Ad Space"
+ * placeholders during AdSense review. Set NEXT_PUBLIC_ADS_ENABLED=true to show.
+ */
+export const ADS_ENABLED =
+  process.env.NEXT_PUBLIC_ADS_ENABLED?.trim().toLowerCase() === "true";
+
 export const FOOTER_LINKS = [
   { href: "/split-text-by-sentence", label: "Split by Sentence" },
   { href: "/split-text-by-line", label: "Split by Line" },

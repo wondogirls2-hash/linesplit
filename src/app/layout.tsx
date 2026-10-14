@@ -19,27 +19,18 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/`,
   },
   title: {
-    default:
-      "Text & Paragraph Splitter | Split Text by Sentences, Length, or Lines",
+    default: "Paragraph Splitter: Split Text into Paragraphs or Sentences",
     template: `%s — ${SITE_NAME}`,
   },
   description:
-    "Free online text splitter. Break long essays, articles, and AI prompts into readable paragraphs, sentences, character counts, or custom delimiters instantly.",
-  keywords: [
-    "paragraph splitter",
-    "text splitter",
-    "split text by line",
-    "split sentences online",
-    "bulk text chunker",
-    "paragraph break generator",
-  ],
+    "Free online paragraph splitter. Split long text into paragraphs, sentences, or fixed lengths in seconds. Runs 100% in your browser, with no upload and no AI rewrite.",
   openGraph: {
     siteName: SITE_NAME,
     type: "website",
     url: `${SITE_URL}/`,
-    title: "Online Paragraph & Text Splitter - Fast, Free & Private",
+    title: "Paragraph Splitter: Split Text into Paragraphs or Sentences",
     description:
-      "Split large text chunks by characters, lines, or sentences. Perfect for copywriters, bloggers, and LLM prompt formatting.",
+      "Free online paragraph splitter. Split long text into paragraphs, sentences, or fixed lengths in seconds. Runs 100% in your browser, with no upload and no AI rewrite.",
     images: [
       {
         url: OG_IMAGE_PATH,
@@ -51,9 +42,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Online Paragraph & Text Splitter - Fast, Free & Private",
+    title: "Paragraph Splitter: Split Text into Paragraphs or Sentences",
     description:
-      "Split large text chunks by characters, lines, or sentences. Perfect for copywriters, bloggers, and LLM prompt formatting.",
+      "Free online paragraph splitter. Split long text into paragraphs, sentences, or fixed lengths in seconds. Runs 100% in your browser, with no upload and no AI rewrite.",
     images: [OG_IMAGE_PATH],
   },
   robots: {

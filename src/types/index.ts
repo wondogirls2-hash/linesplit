@@ -1,10 +1,18 @@
 export type BulletStyle = "none" | "dash" | "bullet";
 export type LineBreakStyle = "single" | "double";
-export type SplitMode = "sentence" | "chars";
+export type SplitMode =
+  | "sentence"
+  | "chars"
+  | "sentences-per-paragraph"
+  | "into-n-paragraphs";
 
 export type ConvertOptions = {
   mode: SplitMode;
   charLimit: number;
+  /** Sentences per paragraph when mode is sentences-per-paragraph (1–20) */
+  sentencesPerParagraph: number;
+  /** Target paragraph count when mode is into-n-paragraphs (2–20) */
+  paragraphCount: number;
   fixDoubleSpacing: boolean;
   bullet: BulletStyle;
   lineBreak: LineBreakStyle;
@@ -14,6 +22,8 @@ export type ConvertOptions = {
 export const DEFAULT_OPTIONS: ConvertOptions = {
   mode: "sentence",
   charLimit: 160,
+  sentencesPerParagraph: 3,
+  paragraphCount: 2,
   fixDoubleSpacing: true,
   bullet: "none",
   lineBreak: "single",

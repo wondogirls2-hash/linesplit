@@ -1,7 +1,7 @@
 "use client";
 
 import { useAdConsent } from "@/components/AdConsentProvider";
-import { ADSENSE_CLIENT_ID } from "@/lib/site";
+import { ADS_ENABLED, ADSENSE_CLIENT_ID } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export type AdPosition =
@@ -44,8 +44,8 @@ const SIZE_BY_POSITION: Record<
 };
 
 /**
- * AdSense-ready slot. Ads scripts load only after cookie consent Accept.
- * Until a real client id / unit is configured, a labeled placeholder is shown.
+ * AdSense slot. Hidden unless NEXT_PUBLIC_ADS_ENABLED=true.
+ * Never shows "Ad Space" placeholder text (avoids unfinished look during review).
  */
 export function AdSlot({
   position,
@@ -55,11 +55,28 @@ export function AdSlot({
   const { ready, adsAllowed, status } = useAdConsent();
   const size = SIZE_BY_POSITION[position];
 
-  if (ready && status === "rejected") {
-    return null;
-  }
+  if (!ADS_ENABLED) return null;
+  if (ready && status === "rejected") return null;
 
   const showLiveUnit = adsAllowed && Boolean(ADSENSE_CLIENT_ID);
+
+  if (!showLiveUnit) {
+    // Reserve height for CLS only after consent is accepted but unit not live yet
+    if (!adsAllowed) return null;
+    return (
+      <aside
+        data-ad-position={position}
+        data-ad-slot={slotId}
+        aria-hidden
+        className={cn(
+          "mx-auto w-full",
+          size.maxWidth,
+          size.height,
+          className
+        )}
+      />
+    );
+  }
 
   return (
     <aside
@@ -73,35 +90,14 @@ export function AdSlot({
         className
       )}
     >
-      {showLiveUnit ? (
-        <ins
-          className={cn("adsbygoogle block w-full", size.height)}
-          style={{ display: "block" }}
-          data-ad-client={ADSENSE_CLIENT_ID}
-          data-ad-slot={slotId}
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        />
-      ) : (
-        <div
-          className={cn(
-            "flex w-full items-center justify-center rounded-2xl border border-dashed border-border/70 bg-muted/40 text-muted-foreground",
-            size.height,
-            position === "between-panels" &&
-              "lg:h-full lg:min-h-[320px] lg:w-[120px] lg:shrink-0 xl:w-[140px]"
-          )}
-        >
-          <div className="flex flex-col items-center gap-1 px-3 text-center">
-            <span className="text-[11px] font-semibold uppercase tracking-widest opacity-70">
-              Ad Space
-            </span>
-            <span className="text-[10px] opacity-50">
-              {size.label} · {slotId}
-              {!adsAllowed && ready ? " · awaiting consent" : ""}
-            </span>
-          </div>
-        </div>
-      )}
+      <ins
+        className={cn("adsbygoogle block w-full", size.height)}
+        style={{ display: "block" }}
+        data-ad-client={ADSENSE_CLIENT_ID}
+        data-ad-slot={slotId}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
     </aside>
   );
 }

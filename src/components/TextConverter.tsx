@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { convertText } from "@/lib/applyOptions";
+import { convertTextWithMeta } from "@/lib/applyOptions";
 import { useHistory } from "@/lib/useHistory";
 import { DEFAULT_OPTIONS, type ConvertOptions } from "@/types";
 import { AdSlot } from "@/components/AdSlot";
@@ -22,6 +22,7 @@ type TextConverterProps = {
 export function TextConverter({ initialOptions }: TextConverterProps) {
   const [source, setSource] = useState("");
   const [result, setResult] = useState("");
+  const [notice, setNotice] = useState<string | undefined>();
   const [resultDirty, setResultDirty] = useState(false);
   const [options, setOptions] = useState<ConvertOptions>(() => ({
     ...DEFAULT_OPTIONS,
@@ -49,10 +50,13 @@ export function TextConverter({ initialOptions }: TextConverterProps) {
 
   const regenerate = useCallback((text: string, opts: ConvertOptions) => {
     try {
-      setResult(convertText(text, opts));
+      const next = convertTextWithMeta(text, opts);
+      setResult(next.text);
+      setNotice(next.notice);
       setResultDirty(false);
     } catch {
       setResult(text);
+      setNotice(undefined);
       setResultDirty(true);
     }
   }, []);
@@ -92,6 +96,7 @@ export function TextConverter({ initialOptions }: TextConverterProps) {
   const handleClear = useCallback(() => {
     setSource("");
     setResult("");
+    setNotice(undefined);
     setResultDirty(false);
   }, []);
 
@@ -207,6 +212,15 @@ export function TextConverter({ initialOptions }: TextConverterProps) {
               </div>
               <FloatingCopyButton text={result} />
             </div>
+
+            {notice ? (
+              <p
+                role="status"
+                className="mx-4 mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-100 sm:mx-5"
+              >
+                {notice}
+              </p>
+            ) : null}
 
             <Textarea
               ref={resultTextareaRef}
